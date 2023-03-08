@@ -83,14 +83,9 @@ class Graph {
         }
         u.visit = true;
         if (ans.size() > 1) {
-            string tmp = "";
             for (string s: ans) {
-                if (tmp != "") {
-                    tmp += " ";
-                }
-                tmp += s;
+                results.push_back(s);
             }
-            results.push_back(tmp);
         }
         for (Word &w: v[u.tail - 'a']) {
             if (w.word == u.word && !loop) {
@@ -117,9 +112,9 @@ class Graph {
             for (Word u: v[i]) {
                 if (!u.visit) {
                     vector<string> result_tmp;
-                    int ans_tmp = dfs_max_word(result_tmp, u, tail, loop);
-                    if (ans < ans_tmp) {
-                        ans = ans_tmp;
+                    dfs_max_word(result_tmp, u, tail, loop);
+                    if (ans < u.max) {
+                        ans = u.max;
                         results = result_tmp;
                     }
                 }
@@ -132,17 +127,30 @@ class Graph {
         return ans;
     }
 
-    int dfs_max_word(vector<string> &results, Word u, char tail, bool loop) {
+    void dfs_max_word(vector<string> &results, Word u, char tail, bool loop) {
         u.visit = true;
         int ans = 0;
+        Word *max_word = nullptr;
         for (Word w: v[u.tail - 'a']) {
             if (w.word == u.word && !loop) {
                 continue;
             }
             if (!w.visit) {
-                int ans_tmp = dfs_max_word(results, w, tail, loop);
+                dfs_max_word(results, w, tail, loop);
             }
-            dfs_max_word(results, w, ans, loop);
+            if (ans < w.max) {
+                ans = w.max;
+                max_word = &w;
+            }
+        }
+        if (tail == '\0' || u.tail == tail) {
+            u.max = 1;
+            results.push_back(u.word);
+        }
+        else if (max > 0) {
+            u.max = ans + 1;
+            u.path.assign(max_word->path.begin(), max_word->path.end());
+            u.path.push_back(max_word->word);
         }
     }
 };

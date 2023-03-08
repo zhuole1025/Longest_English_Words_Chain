@@ -9,6 +9,7 @@ class Word {
         int tail;
         int max;
         int visit;
+        vector<String> path;
         Word(string &input) {
             this->word = input;
             this->len = input.length();
@@ -17,4 +18,4 @@ class Word {
             this->max = 0;
             this->visit = 0;
         }
-}
+};
