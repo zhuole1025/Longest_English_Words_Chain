@@ -5,6 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("Longest_English_Words_Chain")
 
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 # 将源代码添加到此项目的可执行文件。
 add_executable (Longest_English_Words_Chain   "src/main.cpp")
 
