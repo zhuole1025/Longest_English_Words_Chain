@@ -3,11 +3,17 @@
 class Solver {
     Graph graph;
     public:
-    Solver(const char* words[], int len) {
+
+    Solver(const char* words[], int len, char* results[]) {
         graph = Graph(words, len);
     }
+
     int get_all(char* results[]) {
         graph.get_all(results);
+    }
+
+    int get_max_word(char* results[]) {
+        graph.get_max_word(results);
     }
 };
 
