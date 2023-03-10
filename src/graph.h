@@ -12,12 +12,11 @@ using namespace std;
 class Graph {
     vector<vector<Word>> v;
     vector<string> bak;
-    char skip;
     bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
     int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT], index, sum, num, max;
     stack<int> stk;
     public:
-    Graph(const char* words[], int len, char skip, bool circle, bool weight) {
+    Graph(const char* words[], int len, bool weight) {
         for (int i = 0; i < len; i ++) {
             if (strlen(words[i]) > 1) {
                 bak.push_back(words[i]);
@@ -26,7 +25,6 @@ class Graph {
             }
         }
         this->num = bak.size();
-        this->skip = skip;
     }
         // for (int i = 0; i < MAX_POINT; i++) {
         //     v[i].clear();
