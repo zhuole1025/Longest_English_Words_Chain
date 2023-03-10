@@ -137,6 +137,7 @@ vector<const char*> extract_words(ifstream& file) {
             wordList.push_back(word.c_str());
         }
     }
+    return wordList;
 }
 
 int main(int argc, char* argv[]) {

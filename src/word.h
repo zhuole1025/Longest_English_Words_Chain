@@ -14,7 +14,7 @@ class Word {
         vector<string> path;
         Word(const char *input, bool weight) {
             this->word = input;
-            this->len = strlen(input);
+            this->len = (int)strlen(input);
             this->head = input[0] - 'a';
             this->tail = input[len - 1] - 'a';
             this->max = 0;

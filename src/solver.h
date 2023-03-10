@@ -21,14 +21,14 @@ class Solver {
         return res;
     }
 
-    int get_max_word(char* results[], char head, char tail, bool loop) {
-        int res = graph.get_max_word(results_tmp, head, tail, loop);
+    int get_max_word(char* results[], char head, char tail, char skip, bool loop) {
+        int res = graph.get_max_word(results_tmp, head, tail, skip, loop);
         postprocess(results_tmp, results);
         return res;
     }
 
-    int get_max_char(char* results[], char head, char tail, bool loop) {
-        int res = graph.get_max_word(results_tmp, head, tail, loop);
+    int get_max_char(char* results[], char head, char tail, char skip, bool loop) {
+        int res = graph.get_max_word(results_tmp, head, tail, skip, loop);
         postprocess(results_tmp, results);
         return res;
     }
