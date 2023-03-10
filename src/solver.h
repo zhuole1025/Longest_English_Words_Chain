@@ -4,7 +4,7 @@ class Solver {
     Graph graph;
     public:
 
-    Solver(const char* words[], int len, char* results[]) {
+    Solver(const char* words[], int len) {
         graph = Graph(words, len);
     }
 

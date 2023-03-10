@@ -9,13 +9,15 @@ class Word {
         int tail;
         int max;
         int visit;
-        vector<String> path;
-        Word(string &input) {
+        int visit_circle;
+        vector<string> path;
+        Word(const char *input) {
             this->word = input;
-            this->len = input.length();
+            this->len = strlen(input);
             this->head = input[0] - 'a';
             this->tail = input[len - 1] - 'a';
             this->max = 0;
             this->visit = 0;
+            this->visit_circle = 0;
         }
 };

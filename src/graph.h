@@ -1,6 +1,7 @@
 #include <vector>
 #include <stack>
 #include <string>
+#include <unordered_set>
 #include "word.h"
 
 using namespace std;
@@ -11,34 +12,39 @@ using namespace std;
 class Graph {
     vector<vector<Word>> v;
     vector<string> bak;
-    bool vis[MAX_POINT], vis_tmp[MAX_POINT];
+    char skip;
+    bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
     int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT], index, sum, num, max;
     stack<int> stk;
     public:
-    Graph(const char* words[], int len) {
+    Graph(const char* words[], int len, char skip, bool circle) {
         for (int i = 0; i < len; i ++) {
             if (strlen(words[i]) > 1) {
                 bak.push_back(words[i]);
+                Word word = Word(words[i]);
+                v[word.head].push_back(word);
             }
         }
-        num = bak.size();
-        for (int i = 0; i < MAX_POINT; i++) {
-            v[i].clear();
-            vis[i] = false;
-        }
-        for (int i = 0; i < num; i++) {
-            string tmp = bak[i];
-            if (tmp.size() > 1) {
-                v[tmp[0] - 'a'].push_back(Word(tmp));
-            }
-        }
+        this->num = bak.size();
+        this->skip = skip;
+    }
+        // for (int i = 0; i < MAX_POINT; i++) {
+        //     v[i].clear();
+        //     vis[i] = false;
+        // }
+        // for (int i = 0; i < num; i++) {
+        //     string tmp = bak[i];
+        //     if (tmp.size() > 1) {
+        //         v[tmp[0] - 'a'].push_back(Word(tmp));
+        //     }
+        // }
         // index = sum = 0;
         // for (int i = 0; i < NUM_POINT; i++) {
         //     if (!vis[i]) {
         //         tarjan(i);
         //     }
         // }
-    }
+    // }
 
     // void tarjan(int u) {
     //     dfn[u] = low[u] = ++index;
@@ -67,17 +73,56 @@ class Graph {
     //     } 
     // }
 
-    int get_all(vector<string> &results, bool loop) {
+    void update_graph() {
+        for (int i = 0; i < num; i ++) {
+            if (bak[i][0] == skip) {
+                bak.earase(bak.begin() + i);
+                bak.push_back(words[i]);
+                Word word = Word(words[i]);
+                v[word.head].push_back(word);
+            }
+        }
+        this->num = bak.size();
+    }
+
+    bool check_circle() {
+        for (int i = 0; i < NUM_POINT; i++) {
+            for (Word &w: v[i]) {
+                if (dfs_circle(w)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool dfs_circle(Word &u) {
+        u.visit_circle = 1;
+        for (Word &w: v[u.tail - 'a']) {
+            if (w.word == u.word) {
+                continue;
+            }
+            if (w.visit_circle == 1) {
+                return true;
+            }
+            if (w.visit_circle == 0 && dfs_circle(w)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int get_all(vector<string> &results) {
         for (int i = 0; i < NUM_POINT; i++) {
             for (Word &w: v[i]) {
                 vector<string> tmp;
-                dfs_all(results, w, tmp, loop);
+                dfs_all(results, w, tmp);
             }
         }
         return 0;
     }
 
-    void dfs_all(vector<string> &results, Word &u, vector<string> &ans, bool loop) {
+    void dfs_all(vector<string> &results, Word &u, vector<string> &ans) {
         if (u.visit) {
             return;
         }
@@ -88,11 +133,11 @@ class Graph {
             }
         }
         for (Word &w: v[u.tail - 'a']) {
-            if (w.word == u.word && !loop) {
+            if (w.word == u.word) {
                 continue;
             }
             ans.push_back(w.word);
-            dfs_all(results, w, ans, loop);
+            dfs_all(results, w, ans);
             ans.pop_back();
         }
     }
@@ -110,7 +155,7 @@ class Graph {
         }
         for (int i: task) {
             for (Word u: v[i]) {
-                if (!u.visit) {
+                if (!loop || !u.visit) {
                     vector<string> result_tmp;
                     dfs_max_word(result_tmp, u, tail, loop);
                     if (ans < u.max) {
@@ -132,10 +177,10 @@ class Graph {
         int ans = 0;
         Word *max_word = nullptr;
         for (Word w: v[u.tail - 'a']) {
-            if (w.word == u.word && !loop) {
+            if (w.word == u.word) {
                 continue;
             }
-            if (!w.visit) {
+            if (loop || !w.visit) {
                 dfs_max_word(results, w, tail, loop);
             }
             if (ans < w.max) {
