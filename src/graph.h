@@ -24,7 +24,7 @@ class Graph {
                 v[word.head].push_back(word);
             }
         }
-        this->num = bak.size();
+        this->num = (int)bak.size();
     }
         // for (int i = 0; i < MAX_POINT; i++) {
         //     v[i].clear();
@@ -139,7 +139,7 @@ class Graph {
         }
     }
 
-    int get_max_word(vector<string> &results, char head, char tail, bool loop) {
+    int get_max_word(vector<string> &results, char head, char tail, char skip, bool loop) {
         int ans = 0;
         vector<int> task;
         if (head != '\0') {
@@ -154,7 +154,7 @@ class Graph {
             for (Word u: v[i]) {
                 if (!loop || !u.visit) {
                     vector<string> result_tmp;
-                    dfs_max_word(result_tmp, u, tail, loop);
+                    dfs_max_word(result_tmp, u, tail, skip, loop);
                     if (ans < u.max) {
                         ans = u.max;
                         results = result_tmp;
@@ -169,7 +169,7 @@ class Graph {
         return ans;
     }
 
-    void dfs_max_word(vector<string> &results, Word u, char tail, bool loop) {
+    void dfs_max_word(vector<string> &results, Word u, char tail, char skip, bool loop) {
         u.visit = true;
         int ans = 0;
         Word *max_word = nullptr;
@@ -178,7 +178,7 @@ class Graph {
                 continue;
             }
             if (loop || !w.visit) {
-                dfs_max_word(results, w, tail, loop);
+                dfs_max_word(results, w, tail, skip, loop);
             }
             if (ans < w.max) {
                 ans = w.max;
