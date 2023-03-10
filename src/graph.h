@@ -71,15 +71,16 @@ class Graph {
     //     } 
     // }
 
-    // void update_graph() {
-    //     for (int i = 0; i < num; i ++) {
-    //         if (bak[i][0] == skip) {
-    //             bak.erase(bak.begin() + i);
+    void update_graph(char skip) {
+        // for (int i = 0; i < num; i ++) {
+        //     if (bak[i][0] == skip) {
+        //         bak.erase(bak.begin() + i);
 
-    //         }
-    //     }
-    //     this->num = bak.size();
-    // }
+        //     }
+        // }
+        // this->num = bak.size();
+        v[skip].clear();
+    }
 
     bool check_circle() {
         for (int i = 0; i < NUM_POINT; i++) {
