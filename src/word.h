@@ -10,8 +10,9 @@ class Word {
         int max;
         int visit;
         int visit_circle;
+        int weight;
         vector<string> path;
-        Word(const char *input) {
+        Word(const char *input, bool weight) {
             this->word = input;
             this->len = strlen(input);
             this->head = input[0] - 'a';
@@ -19,5 +20,10 @@ class Word {
             this->max = 0;
             this->visit = 0;
             this->visit_circle = 0;
+            if (weight) {
+                this->weight = len;
+            } else {
+                this->weight = 1;
+            }
         }
 };

@@ -17,11 +17,11 @@ class Graph {
     int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT], index, sum, num, max;
     stack<int> stk;
     public:
-    Graph(const char* words[], int len, char skip, bool circle) {
+    Graph(const char* words[], int len, char skip, bool circle, bool weight) {
         for (int i = 0; i < len; i ++) {
             if (strlen(words[i]) > 1) {
                 bak.push_back(words[i]);
-                Word word = Word(words[i]);
+                Word word = Word(words[i], weight);
                 v[word.head].push_back(word);
             }
         }
@@ -73,17 +73,15 @@ class Graph {
     //     } 
     // }
 
-    void update_graph() {
-        for (int i = 0; i < num; i ++) {
-            if (bak[i][0] == skip) {
-                bak.earase(bak.begin() + i);
-                bak.push_back(words[i]);
-                Word word = Word(words[i]);
-                v[word.head].push_back(word);
-            }
-        }
-        this->num = bak.size();
-    }
+    // void update_graph() {
+    //     for (int i = 0; i < num; i ++) {
+    //         if (bak[i][0] == skip) {
+    //             bak.erase(bak.begin() + i);
+
+    //         }
+    //     }
+    //     this->num = bak.size();
+    // }
 
     bool check_circle() {
         for (int i = 0; i < NUM_POINT; i++) {
@@ -189,11 +187,11 @@ class Graph {
             }
         }
         if (tail == '\0' || u.tail == tail) {
-            u.max = 1;
+            u.max = u.weight;
             results.push_back(u.word);
         }
         else if (max > 0) {
-            u.max = ans + 1;
+            u.max = ans + u.weight;
             u.path.assign(max_word->path.begin(), max_word->path.end());
             u.path.push_back(max_word->word);
         }
