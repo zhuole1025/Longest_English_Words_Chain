@@ -1,7 +1,8 @@
 #include "graph.h"
 
 class Solver {
-    Graph graph;
+    const char** words;
+    Graph graph = Graph(words, 0, false);   // fine
     vector<string> results_tmp;
     public:
     Solver(const char* words[], int len, bool weight) {
