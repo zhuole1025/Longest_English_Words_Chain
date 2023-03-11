@@ -124,6 +124,7 @@ class Graph {
             return;
         }
         u.visit = true;
+        printf("%s", u.word.c_str());
         if (ans.size() > 1) {
             for (string s: ans) {
                 results.push_back(s);

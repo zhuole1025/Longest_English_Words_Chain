@@ -5,16 +5,16 @@
 #include <algorithm>
 #include <filesystem>
 #include "core.h"
-constexpr auto DEBUG = 1;
-constexpr auto INFO = 0;
 
 using namespace std;
 
 bool is_valid_char(char c) {
+    // ï¿½Ð¶ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ó¢ï¿½ï¿½ï¿½Ö·ï¿½
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È·
     if (argc <= 2) {
         cout << "Usage: " << argv[0] << "[-option]+ <filename>" << std::endl;
         return 1;
@@ -98,6 +98,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         ++i;
     }
     if (ret != -1) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»
         if (all_chains + max_word + max_char >= 2) {
             cerr << "-w, -n, -c should not be used together" << endl;
             ret = -1;
@@ -105,7 +106,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         else if (all_chains + max_word + max_char == 0) {
             cerr << "you should use one of -w, -n, -c" << endl;
         }
-
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -r ï¿½ï¿½ï¿½â²»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½
         else if (headc > 1 || tailc > 1 || forbidden > 1) {
             cerr << "-h, -t, -j should be used no more than twice!" << endl;
             ret = -1;
@@ -116,14 +117,6 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
     return ret;
 }
 
-int vector2Words(vector<const char*> wordList, const char** words) {
-    int size = 0;
-    for (const char* i : wordList) {
-        words[size++] = i;
-    }
-    return size;
-}
-
 vector<const char*> extract_words(ifstream& file) {
     vector<const char*> wordList;
     string line, word;
@@ -131,26 +124,17 @@ vector<const char*> extract_words(ifstream& file) {
     while (getline(file, line)) {
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
-                word += (line[i] | 0x20); 
+                word += (line[i] | 0x20); // ï¿½ï¿½ï¿½ï¿½Ð¡Ð´ï¿½ï¿½Ä¸
             }
             else if (!word.empty()) {
-                char* tmp = new char[strlen(word.c_str()) + 1];
-                strcpy(tmp, word.c_str());
-                wordList.push_back(tmp);
-                //cout << wordList[wordList.size()-1] << endl;
-                word.clear();
+                wordList.push_back(word.c_str());
+                //cout << word.c_str() << " while wordList size: " << wordList.size() << endl;
+                word = "";
             }
         }
 
         if (!word.empty()) {
-            char* tmp = new char[strlen(word.c_str()) + 1];
-            strcpy(tmp, word.c_str());
-            wordList.push_back(tmp);
-        }
-    }
-    if (INFO) {
-        for (int i = 0; i < wordList.size(); ++i) {
-            cout << wordList[i] << endl;
+            wordList.push_back(word.c_str());
         }
     }
     return wordList;
@@ -165,24 +149,16 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
-    if (DEBUG) {
-        func_type = 1;  // 1 -n, 2 -w, 3 -c
-        head = 0;
-        tail = 0;
-        jinz = 0;
-        loop = false;
-        filename = "../test.txt";
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½
+    int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
+    if (ret == -1) {
+        return ret;
     }
-    else {
-        // ²ÎÊý¼æÈÝÒì³£´¦Àí
-        int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
-        if (ret == -1) {
-            return ret;
-        }
-    }
-    string outfile = func_type == 1 ? "": "solution.txt";
-    ifstream file(filename);
 
+    string outfile = func_type == 1 ? "": "solution.txt";
+    // filename = "test.txt";
+    ifstream file(filename);
+    // ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ç·ï¿½É¹ï¿½ï¿½ï¿½
     if (!file.is_open()) {
         cerr << "Error opening file " << filename << endl;
         return -1;
@@ -190,7 +166,7 @@ int main(int argc, char* argv[]) {
 
     // extract legal words into wordList
     vector<const char*> wordList = extract_words(file);
-    
+
     vector<char*> results(32768, 0);
 
     int func_ret = 0;// TODO main func call
@@ -210,9 +186,8 @@ int main(int argc, char* argv[]) {
         break;
     }
 
-    cout << "here." << '\n';
     if (results.size() > 20000) {
-        cerr << results.size() << " results.size() > 20000!" << '\n';
+        cerr << "results.size() > 20000!" << '\n';
         return -1;
     }
 
@@ -222,7 +197,7 @@ int main(int argc, char* argv[]) {
     // output
     if (outfile.empty()) {
         // -n
-        out << func_ret << '\n';
+        out << ret << '\n';
     }
     else {
         ofstream output;
