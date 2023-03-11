@@ -9,12 +9,12 @@
 using namespace std;
 
 bool is_valid_char(char c) {
-    // ÅÐ¶ÏÒ»¸ö×Ö·ûÊÇ·ñÊÇÓ¢ÎÄ×Ö·û
+    // ï¿½Ð¶ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ó¢ï¿½ï¿½ï¿½Ö·ï¿½
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
-    // ¼ì²éÃüÁîÐÐ²ÎÊýÊÇ·ñÕýÈ·
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È·
     if (argc <= 2) {
         cout << "Usage: " << argv[0] << "[-option]+ <filename>" << std::endl;
         return 1;
@@ -98,7 +98,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         ++i;
     }
     if (ret != -1) {
-        // ¹¦ÄÜÐÍ²ÎÊý»¥Ïà³åÍ»
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»
         if (all_chains + max_word + max_char >= 2) {
             cerr << "-w, -n, -c should not be used together" << endl;
             ret = -1;
@@ -106,7 +106,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         else if (all_chains + max_word + max_char == 0) {
             cerr << "you should use one of -w, -n, -c" << endl;
         }
-        // ¸½¼ÓÐÍ²ÎÊý³ýÁË -r ÒÔÍâ²»ÔÊÐí³öÏÖ¶à´Î
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -r ï¿½ï¿½ï¿½â²»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½
         else if (headc > 1 || tailc > 1 || forbidden > 1) {
             cerr << "-h, -t, -j should be used no more than twice!" << endl;
             ret = -1;
@@ -124,7 +124,7 @@ vector<const char*> extract_words(ifstream& file) {
     while (getline(file, line)) {
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
-                word += (line[i] | 0x20); // »»³ÉÐ¡Ð´×ÖÄ¸
+                word += (line[i] | 0x20); // ï¿½ï¿½ï¿½ï¿½Ð¡Ð´ï¿½ï¿½Ä¸
             }
             else if (!word.empty()) {
                 wordList.push_back(word.c_str());
@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
-    // ²ÎÊý¼æÈÝÒì³£´¦Àí
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½
     int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
     if (ret == -1) {
         return ret;
@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
     string outfile = func_type == 1 ? "": "solution.txt";
     // filename = "test.txt";
     ifstream file(filename);
-    // ¼ì²éÎÄ¼þÊÇ·ñ³É¹¦´ò¿ª
+    // ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ç·ï¿½É¹ï¿½ï¿½ï¿½
     if (!file.is_open()) {
         cerr << "Error opening file " << filename << endl;
         return -1;
@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
         func_ret = gen_chain_char(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
         break;
     default:
-        static_assert("func_ret set wrong?!");
+        // static_assert("func_ret set wrong?!");
         break;
     }
 
@@ -210,7 +210,7 @@ int main(int argc, char* argv[]) {
     }
 
     // TODO output results
-    for (int i{ 0 }; i < func_ret; ++i) {
+    for (int i = 0; i < func_ret; ++i) {
         out << results[i] << '\n';
     }
 

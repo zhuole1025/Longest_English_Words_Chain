@@ -1,4 +1,6 @@
 #include <string>
+#include <vector>
+
 using namespace std;
 
 class Word {
@@ -11,7 +13,7 @@ class Word {
         int visit;
         int visit_circle;
         int weight;
-        vector<string> path;
+        vector<string> path = vector<string>();
         Word(const char *input, bool weight) {
             this->word = input;
             this->len = (int)strlen(input);
@@ -25,5 +27,6 @@ class Word {
             } else {
                 this->weight = 1;
             }
+            this->path.clear();
         }
 };

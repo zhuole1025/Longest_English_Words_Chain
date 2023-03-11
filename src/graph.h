@@ -10,7 +10,7 @@ using namespace std;
 #define NUM_POINT 26
 
 class Graph {
-    vector<vector<Word>> v;
+    vector< vector<Word> > v = vector< vector<Word> >(MAX_POINT);
     vector<string> bak;
     bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
     int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT], index, sum, num, max;

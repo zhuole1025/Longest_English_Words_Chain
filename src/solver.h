@@ -1,12 +1,11 @@
 #include "graph.h"
 
 class Solver {
-    const char** words;
-    Graph graph = Graph(words, 0, false);   // fine
+    Graph *graph;
     vector<string> results_tmp;
     public:
     Solver(const char* words[], int len, bool weight) {
-        graph = Graph(words, len, weight);
+        graph = new Graph(words, len, weight);
     }
 
     void postprocess(vector<string> &results_tmp, char* results[]) {
@@ -17,19 +16,19 @@ class Solver {
     }
 
     int get_all(char* results[]) {
-        int res = graph.get_all(results_tmp);
+        int res = graph->get_all(results_tmp);
         postprocess(results_tmp, results);
         return res;
     }
 
     int get_max_word(char* results[], char head, char tail, char skip, bool loop) {
-        int res = graph.get_max_word(results_tmp, head, tail, skip, loop);
+        int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
         postprocess(results_tmp, results);
         return res;
     }
 
     int get_max_char(char* results[], char head, char tail, char skip, bool loop) {
-        int res = graph.get_max_word(results_tmp, head, tail, skip, loop);
+        int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
         postprocess(results_tmp, results);
         return res;
     }
