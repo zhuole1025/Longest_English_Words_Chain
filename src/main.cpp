@@ -5,16 +5,18 @@
 #include <algorithm>
 #include <filesystem>
 #include "core.h"
+constexpr auto DEBUG = 1;
+constexpr auto INFO = 1;
 
 using namespace std;
 
 bool is_valid_char(char c) {
-    // �ж�һ���ַ��Ƿ���Ӣ���ַ�
+    
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
-    // ��������в����Ƿ���ȷ
+    
     if (argc <= 2) {
         cout << "Usage: " << argv[0] << "[-option]+ <filename>" << std::endl;
         return 1;
@@ -124,17 +126,21 @@ vector<const char*> extract_words(ifstream& file) {
     while (getline(file, line)) {
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
-                word += (line[i] | 0x20); // ����Сд��ĸ
+                word += (line[i] | 0x20); 
             }
             else if (!word.empty()) {
-                wordList.push_back(word.c_str());
+                char* tmp = new char[strlen(word.c_str()) + 1];
+                strcpy(tmp, word.c_str());
+                wordList.push_back(tmp);
                 //cout << word.c_str() << " while wordList size: " << wordList.size() << endl;
-                word = "";
+                word.clear();
             }
         }
 
         if (!word.empty()) {
-            wordList.push_back(word.c_str());
+            char* tmp = new char[strlen(word.c_str()) + 1];
+            strcpy(tmp, word.c_str());
+            wordList.push_back(tmp);
         }
     }
     return wordList;
@@ -149,16 +155,24 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
-    // ���������쳣����
-    int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
-    if (ret == -1) {
-        return ret;
+    if (DEBUG) {
+        func_type = 1;  // 1-n,2-w,3-c;
+        head = 0;
+        tail = 0;
+        jinz = 0;
+        loop = false;
     }
+    else {
+        int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
+        if (ret == -1) {
+            return ret;
+        }
+    }
+
 
     string outfile = func_type == 1 ? "": "solution.txt";
     // filename = "test.txt";
     ifstream file(filename);
-    // ����ļ��Ƿ�ɹ���
     if (!file.is_open()) {
         cerr << "Error opening file " << filename << endl;
         return -1;
@@ -197,7 +211,7 @@ int main(int argc, char* argv[]) {
     // output
     if (outfile.empty()) {
         // -n
-        out << ret << '\n';
+        out << func_ret << '\n';
     }
     else {
         ofstream output;
