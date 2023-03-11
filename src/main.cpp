@@ -161,6 +161,7 @@ int main(int argc, char* argv[]) {
         tail = 0;
         jinz = 0;
         loop = false;
+        filename = "../test.txt";
     }
     else {
         int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
@@ -200,10 +201,10 @@ int main(int argc, char* argv[]) {
         break;
     }
 
-    if (results.size() > 20000) {
-        cerr << "results.size() > 20000!" << '\n';
-        return -1;
-    }
+    // if (results.size() > 20000) {
+    //     cerr << "results.size() > 20000!" << '\n';
+    //     return -1;
+    // }
 
     ofstream output;
     ostream& out = outfile.empty() ? cout : output; // use quote?
@@ -225,7 +226,7 @@ int main(int argc, char* argv[]) {
 
     // TODO output results
     for (int i = 0; i < func_ret; ++i) {
-        out << results[i] << '\n';
+        out << results[i] << " " << '\n';
     }
 
     if (!outfile.empty()) {

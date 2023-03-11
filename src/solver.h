@@ -8,28 +8,29 @@ class Solver {
         graph = new Graph(words, len, weight);
     }
 
-    void postprocess(vector<string> &results_tmp, char* results[]) {
+    int postprocess(vector<string> &results_tmp, char* results[]) {
         for (int i = 0; i < results_tmp.size(); i++) {
             results[i] = (char*)malloc(sizeof(char) * (results_tmp[i].size() + 1));
             strcpy(results[i], results_tmp[i].c_str());
         }
+        return results_tmp.size();
     }
 
     int get_all(char* results[]) {
         int res = graph->get_all(results_tmp);
-        postprocess(results_tmp, results);
-        return res;
+        
+        return postprocess(results_tmp, results);
     }
 
     int get_max_word(char* results[], char head, char tail, char skip, bool loop) {
         int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
-        postprocess(results_tmp, results);
-        return res;
+        
+        return postprocess(results_tmp, results);
     }
 
     int get_max_char(char* results[], char head, char tail, char skip, bool loop) {
         int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
-        postprocess(results_tmp, results);
-        return res;
+        
+        return postprocess(results_tmp, results);
     }
 };

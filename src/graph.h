@@ -95,7 +95,7 @@ class Graph {
 
     bool dfs_circle(Word &u) {
         u.visit_circle = 1;
-        for (Word &w: v[u.tail - 'a']) {
+        for (Word &w: v[u.tail]) {
             if (w.word == u.word) {
                 continue;
             }
@@ -113,29 +113,32 @@ class Graph {
         for (int i = 0; i < NUM_POINT; i++) {
             for (Word &w: v[i]) {
                 vector<string> tmp;
-                dfs_all(results, w, tmp);
+                tmp.push_back(w.word);
+                dfs_all(results, w, tmp, false);
             }
         }
         return 0;
     }
 
-    void dfs_all(vector<string> &results, Word &u, vector<string> &ans) {
-        if (u.visit) {
-            return;
-        }
-        u.visit = true;
-        printf("%s", u.word.c_str());
+    void dfs_all(vector<string> &results, Word &u, vector<string> &ans, bool loop) {
         if (ans.size() > 1) {
+            string str = "";
             for (string s: ans) {
-                results.push_back(s);
+                if (str == "") {
+                    str = s;
+                }
+                else {
+                    str = str + " " + s;
+                }
             }
+            results.push_back(str);
         }
-        for (Word &w: v[u.tail - 'a']) {
-            if (w.word == u.word) {
+        for (Word &w: v[u.tail]) {
+            if (w.word == u.word && loop) {
                 continue;
             }
             ans.push_back(w.word);
-            dfs_all(results, w, ans);
+            dfs_all(results, w, ans, u.word == w.word);
             ans.pop_back();
         }
     }
@@ -145,7 +148,7 @@ class Graph {
         vector<int> task;
         update_graph(skip);
         if (head != '\0') {
-            task.push_back(head - 'a');
+            task.push_back(head);
         }
         else {
             for (int i = 0; i < NUM_POINT; i++) {
@@ -175,7 +178,7 @@ class Graph {
         u.visit = true;
         int ans = 0;
         Word *max_word = nullptr;
-        for (Word w: v[u.tail - 'a']) {
+        for (Word w: v[u.tail]) {
             if (w.word == u.word) {
                 continue;
             }
