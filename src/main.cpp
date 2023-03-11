@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <filesystem>
 #include "core.h"
+constexpr auto DEBUG = 1;
+constexpr auto INFO = 0;
 
 using namespace std;
 
@@ -117,6 +119,14 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
     return ret;
 }
 
+int vector2Words(vector<const char*> wordList, const char** words) {
+    int size = 0;
+    for (const char* i : wordList) {
+        words[size++] = i;
+    }
+    return size;
+}
+
 vector<const char*> extract_words(ifstream& file) {
     vector<const char*> wordList;
     string line, word;
@@ -127,14 +137,23 @@ vector<const char*> extract_words(ifstream& file) {
                 word += (line[i] | 0x20); // 换成小写字母
             }
             else if (!word.empty()) {
-                wordList.push_back(word.c_str());
-                //cout << word.c_str() << " while wordList size: " << wordList.size() << endl;
-                word = "";
+                char* tmp = new char[strlen(word.c_str())];
+                strcpy(tmp, word.c_str());
+                wordList.push_back(tmp);
+                //cout << wordList[wordList.size()-1] << endl;
+                word.clear();
             }
         }
 
         if (!word.empty()) {
-            wordList.push_back(word.c_str());
+            char* tmp = new char[strlen(word.c_str())];
+            strcpy(tmp, word.c_str());
+            wordList.push_back(tmp);
+        }
+    }
+    if (INFO) {
+        for (int i = 0; i < wordList.size(); ++i) {
+            cout << wordList[i] << endl;
         }
     }
     return wordList;
@@ -149,14 +168,22 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
-    // 参数兼容异常处理
-    int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
-    if (ret == -1) {
-        return ret;
+    if (DEBUG) {
+        func_type = 1;  // 1 -n, 2 -w, 3 -c
+        head = 0;
+        tail = 0;
+        jinz = 0;
+        loop = false;
+        filename = "../test.txt";
     }
-
+    else {
+        // 参数兼容异常处理
+        int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
+        if (ret == -1) {
+            return ret;
+        }
+    }
     string outfile = func_type == 1 ? "": "solution.txt";
-    // filename = "test.txt";
     ifstream file(filename);
     // 检查文件是否成功打开
     if (!file.is_open()) {
@@ -166,14 +193,14 @@ int main(int argc, char* argv[]) {
 
     // extract legal words into wordList
     vector<const char*> wordList = extract_words(file);
-
+    
     vector<char*> results(32768, 0);
 
     int func_ret = 0;// TODO main func call
     switch (func_type)
     {
     case 1:
-        func_ret = gen_chains_all(wordList.data(), (int)wordList.size(), results.data());
+        func_ret = gen_chains_all((const char**)wordList.data(), (int)wordList.size(), results.data());
         break;
     case 2:
         func_ret = gen_chain_word(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
@@ -186,8 +213,9 @@ int main(int argc, char* argv[]) {
         break;
     }
 
+    cout << "here." << '\n';
     if (results.size() > 20000) {
-        cerr << "results.size() > 20000!" << '\n';
+        cerr << results.size() << " results.size() > 20000!" << '\n';
         return -1;
     }
 
@@ -197,7 +225,7 @@ int main(int argc, char* argv[]) {
     // output
     if (outfile.empty()) {
         // -n
-        out << ret << '\n';
+        out << func_ret << '\n';
     }
     else {
         ofstream output;

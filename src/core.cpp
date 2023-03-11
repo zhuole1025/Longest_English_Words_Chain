@@ -1,5 +1,6 @@
 #include "solver.h"
 #include "core.h"
+#include <iostream>
 
 
 // -w -h -t -j -r
