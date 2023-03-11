@@ -11,12 +11,10 @@ constexpr auto INFO = 0;
 using namespace std;
 
 bool is_valid_char(char c) {
-    // �ж�һ���ַ��Ƿ���Ӣ���ַ�
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
-    // ��������в����Ƿ����?
     if (argc <= 2) {
         cout << "Usage: " << argv[0] << "[-option]+ <filename>" << std::endl;
         return 1;
@@ -100,7 +98,6 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         ++i;
     }
     if (ret != -1) {
-        // �����Ͳ���������?
         if (all_chains + max_word + max_char >= 2) {
             cerr << "-w, -n, -c should not be used together" << endl;
             ret = -1;
@@ -108,7 +105,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         else if (all_chains + max_word + max_char == 0) {
             cerr << "you should use one of -w, -n, -c" << endl;
         }
-        // �����Ͳ������� -r ���ⲻ�������ֶ��?
+
         else if (headc > 1 || tailc > 1 || forbidden > 1) {
             cerr << "-h, -t, -j should be used no more than twice!" << endl;
             ret = -1;
@@ -134,10 +131,10 @@ vector<const char*> extract_words(ifstream& file) {
     while (getline(file, line)) {
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
-                word += (line[i] | 0x20); // ����Сд��ĸ
+                word += (line[i] | 0x20); 
             }
             else if (!word.empty()) {
-                char* tmp = new char[strlen(word.c_str())];
+                char* tmp = new char[strlen(word.c_str()) + 1];
                 strcpy(tmp, word.c_str());
                 wordList.push_back(tmp);
                 //cout << wordList[wordList.size()-1] << endl;
@@ -146,7 +143,7 @@ vector<const char*> extract_words(ifstream& file) {
         }
 
         if (!word.empty()) {
-            char* tmp = new char[strlen(word.c_str())];
+            char* tmp = new char[strlen(word.c_str()) + 1];
             strcpy(tmp, word.c_str());
             wordList.push_back(tmp);
         }
@@ -168,7 +165,6 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
-<<<<<<< HEAD
     if (DEBUG) {
         func_type = 1;  // 1 -n, 2 -w, 3 -c
         head = 0;
@@ -183,16 +179,10 @@ int main(int argc, char* argv[]) {
         if (ret == -1) {
             return ret;
         }
-=======
-    // ���������쳣����
-    int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
-    if (ret == -1) {
-        return ret;
->>>>>>> 092581dc5054e6aa253a47dd3d4558d2b46529f9
     }
     string outfile = func_type == 1 ? "": "solution.txt";
     ifstream file(filename);
-    // ����ļ��Ƿ�ɹ���
+
     if (!file.is_open()) {
         cerr << "Error opening file " << filename << endl;
         return -1;
@@ -207,7 +197,7 @@ int main(int argc, char* argv[]) {
     switch (func_type)
     {
     case 1:
-        func_ret = gen_chains_all((const char**)wordList.data(), (int)wordList.size(), results.data());
+        func_ret = gen_chains_all(wordList.data(), (int)wordList.size(), results.data());
         break;
     case 2:
         func_ret = gen_chain_word(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
