@@ -10,7 +10,9 @@ class MainWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        # 创建界面元素
+        # elements
+
+        ## file input and output
         self.file_path_label = QLabel("File Path:")
         self.file_path_edit = QLineEdit()
         self.browse_button = QPushButton("Browse")
@@ -26,29 +28,29 @@ class MainWindow(QWidget):
         self.submit_button = QPushButton("Submit")
         self.submit_button.clicked.connect(self.submit_button_click)
 
-        # 添加功能型参数按钮
+        ## arg option n,w,c
         self.radio_btn_n = QRadioButton('ALL')
         self.radio_btn_w = QRadioButton('WORD')
         self.radio_btn_c = QRadioButton('CHAR')
 
-        # 添加附加型参数按钮
+        ## arg option h,t,j,r
         self.radio_btn_h = QCheckBox('h', self)
         self.radio_btn_t = QCheckBox('t', self)
         self.radio_btn_j = QCheckBox('j', self)
         self.radio_btn_r = QCheckBox('r', self)
-
+        ### input char
         self.line_input_h = QLineEdit(self)
         self.line_input_t = QLineEdit(self)
         self.line_input_j = QLineEdit(self)
 
-        # 水平布局
+        # horizontal layout
         file_layout = QHBoxLayout()
         file_layout.addWidget(self.file_path_label)
         file_layout.addWidget(self.file_path_edit)
         file_layout.addWidget(self.browse_button)
         file_layout.addWidget(self.submit_button)
 
-        ## 功能型参数
+        ## main arg
         funcBtn_layout = QHBoxLayout()
         button_group = QButtonGroup()
         button_group.addButton(self.radio_btn_n)
@@ -59,7 +61,7 @@ class MainWindow(QWidget):
         funcBtn_layout.addWidget(self.radio_btn_w)
         funcBtn_layout.addWidget(self.radio_btn_c)
 
-        ## 附加型参数
+        ## attach arg
         func_h_layout = QHBoxLayout()
         func_h_layout.addWidget(self.radio_btn_h)
         func_h_layout.addWidget(self.line_input_h)
@@ -72,7 +74,7 @@ class MainWindow(QWidget):
         func_j_layout.addWidget(self.radio_btn_j)
         func_j_layout.addWidget(self.line_input_j)
 
-        # 垂直布局
+        # vertical layout
         vbox = QVBoxLayout()
         vbox.addLayout(file_layout)
 
@@ -88,7 +90,6 @@ class MainWindow(QWidget):
         vbox.addWidget(self.export_button)
         self.export_button.hide()
         self.output_text.hide()
-        # vbox.addWidget(self.submit_button)
 
         # button actions
         # self.line_input_h.hide()
@@ -105,7 +106,7 @@ class MainWindow(QWidget):
 
         # 设置主窗口属性
         self.setGeometry(100, 100, 500, 400)
-        self.setWindowTitle('Text Input Example')
+        self.setWindowTitle('Find word chain!')
         self.show()
 
     def open_file_dialog(self):
