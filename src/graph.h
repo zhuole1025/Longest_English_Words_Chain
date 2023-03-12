@@ -127,7 +127,7 @@ class Graph {
     void dfs_all(vector<string> &results, Word &u, vector<string> &ans, bool loop) {
         if (ans.size() > 1) {
             string str = "";
-            for (string s: ans) {
+            for (string &s: ans) {
                 if (str == "") {
                     str = s;
                 }
@@ -162,8 +162,8 @@ class Graph {
             }
         }
         for (int i: task) {
-            for (Word u: v[i]) {
-                if (!loop || !u.visit) {
+            for (Word &u: v[i]) {
+                if (loop || !u.visit) {
                     dfs_max_word(u, tail, skip, loop);
                     if (ans < u.max) {
                         ans = u.max;
@@ -183,7 +183,7 @@ class Graph {
         u.visit = true;
         int ans = 0;
         Word max_word;
-        for (Word w: v[u.tail]) {
+        for (Word &w: v[u.tail]) {
             if (w.word == u.word) {
                 continue;
             }

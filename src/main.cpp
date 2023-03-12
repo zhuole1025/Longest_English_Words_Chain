@@ -157,10 +157,10 @@ int main(int argc, char* argv[]) {
 
     if (DEBUG) {
         func_type = 2;  // 1-n,2-w,3-c;
-        head  = 0;
+        head = 0;
         tail = 0;
-        jinz = 0;
-        loop = true;
+        jinz = -1;
+        loop = false;
         filename = "../test.txt";
     }
     else {
