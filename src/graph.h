@@ -10,13 +10,17 @@ using namespace std;
 #define NUM_POINT 26
 
 class Graph {
-    vector< vector<Word> > v = vector< vector<Word> >(MAX_POINT);
+    vector<vector<Word> > v;
     vector<string> bak;
-    bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
-    int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT], index, sum, num, max;
+    // bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
+    // int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT];
+    int index, sum, num, max;
     stack<int> stk;
     public:
     Graph(const char* words[], int len, bool weight) {
+        for (int i = 0; i < NUM_POINT; i++) {
+            v.push_back(vector<Word>());
+        }
         for (int i = 0; i < len; i ++) {
             if (strlen(words[i]) > 1) {
                 bak.push_back(words[i]);
@@ -95,7 +99,7 @@ class Graph {
 
     bool dfs_circle(Word &u) {
         u.visit_circle = 1;
-        for (Word &w: v[u.tail - 'a']) {
+        for (Word &w: v[u.tail]) {
             if (w.word == u.word) {
                 continue;
             }
@@ -113,29 +117,32 @@ class Graph {
         for (int i = 0; i < NUM_POINT; i++) {
             for (Word &w: v[i]) {
                 vector<string> tmp;
-                dfs_all(results, w, tmp);
+                tmp.push_back(w.word);
+                dfs_all(results, w, tmp, false);
             }
         }
         return 0;
     }
 
-    void dfs_all(vector<string> &results, Word &u, vector<string> &ans) {
-        if (u.visit) {
-            return;
-        }
-        u.visit = true;
-        printf("%s", u.word.c_str());
+    void dfs_all(vector<string> &results, Word &u, vector<string> &ans, bool loop) {
         if (ans.size() > 1) {
-            for (string s: ans) {
-                results.push_back(s);
+            string str = "";
+            for (string &s: ans) {
+                if (str == "") {
+                    str = s;
+                }
+                else {
+                    str = str + " " + s;
+                }
             }
+            results.push_back(str);
         }
-        for (Word &w: v[u.tail - 'a']) {
-            if (w.word == u.word) {
+        for (Word &w: v[u.tail]) {
+            if (w.word == u.word && loop) {
                 continue;
             }
             ans.push_back(w.word);
-            dfs_all(results, w, ans);
+            dfs_all(results, w, ans, u.word == w.word);
             ans.pop_back();
         }
     }
@@ -143,9 +150,11 @@ class Graph {
     int get_max_word(vector<string> &results, char head, char tail, char skip, bool loop) {
         int ans = 0;
         vector<int> task;
-        update_graph(skip);
+        if (skip >= 0) {
+            update_graph(skip);
+        }
         if (head != '\0') {
-            task.push_back(head - 'a');
+            task.push_back(head);
         }
         else {
             for (int i = 0; i < NUM_POINT; i++) {
@@ -153,13 +162,12 @@ class Graph {
             }
         }
         for (int i: task) {
-            for (Word u: v[i]) {
-                if (!loop || !u.visit) {
-                    vector<string> result_tmp;
-                    dfs_max_word(result_tmp, u, tail, skip, loop);
+            for (Word &u: v[i]) {
+                if (loop || !u.visit) {
+                    dfs_max_word(u, tail, skip, loop);
                     if (ans < u.max) {
                         ans = u.max;
-                        results = result_tmp;
+                        results = u.path;
                     }
                 }
             }
@@ -171,30 +179,30 @@ class Graph {
         return ans;
     }
 
-    void dfs_max_word(vector<string> &results, Word u, char tail, char skip, bool loop) {
+    void dfs_max_word(Word &u, char tail, char skip, bool loop) {
         u.visit = true;
         int ans = 0;
-        Word *max_word = nullptr;
-        for (Word w: v[u.tail - 'a']) {
+        Word max_word;
+        for (Word &w: v[u.tail]) {
             if (w.word == u.word) {
                 continue;
             }
             if (loop || !w.visit) {
-                dfs_max_word(results, w, tail, skip, loop);
+                dfs_max_word(w, tail, skip, loop);
             }
             if (ans < w.max) {
                 ans = w.max;
-                max_word = &w;
+                max_word = w;
             }
         }
-        if (tail == '\0' || u.tail == tail) {
-            u.max = u.weight;
-            results.push_back(u.word);
-        }
-        else if (max > 0) {
+        if (ans > 0) {
             u.max = ans + u.weight;
-            u.path.assign(max_word->path.begin(), max_word->path.end());
-            u.path.push_back(max_word->word);
+            u.path.assign(max_word.path.begin(), max_word.path.end());
+            u.path.push_back(u.word);
+        }
+        else if (tail == '\0' || u.tail == tail) {
+            u.max = u.weight;
+            u.path.push_back(u.word);
         }
     }
 };
