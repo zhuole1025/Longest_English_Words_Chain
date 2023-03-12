@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
         head = 0;
         tail = 0;
         jinz = -1;
-        loop = false;
+        loop = true;
         filename = "../test.txt";
     }
     else {

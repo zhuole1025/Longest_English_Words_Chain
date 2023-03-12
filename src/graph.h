@@ -163,8 +163,17 @@ class Graph {
         }
         for (int i: task) {
             for (Word &u: v[i]) {
-                if (loop || !u.visit) {
-                    dfs_max_word(u, tail, skip, loop);
+                if (loop) {
+                    unordered_set<string> vis;
+                    vector<string> res;
+                    int num = dfs_max_loop(u, tail, skip, vis, res);
+                    if (ans < num) {
+                        ans = num;
+                        results = res;
+                    }
+                }
+                else if (!u.visit){
+                    dfs_max(u, tail, skip);       
                     if (ans < u.max) {
                         ans = u.max;
                         results = u.path;
@@ -179,7 +188,7 @@ class Graph {
         return ans;
     }
 
-    void dfs_max_word(Word &u, char tail, char skip, bool loop) {
+    void dfs_max(Word &u, char tail, char skip) {
         u.visit = true;
         int ans = 0;
         Word max_word;
@@ -187,8 +196,8 @@ class Graph {
             if (w.word == u.word) {
                 continue;
             }
-            if (loop || !w.visit) {
-                dfs_max_word(w, tail, skip, loop);
+            if (!w.visit) {
+                dfs_max(w, tail, skip);
             }
             if (ans < w.max) {
                 ans = w.max;
@@ -204,5 +213,32 @@ class Graph {
             u.max = u.weight;
             u.path.push_back(u.word);
         }
+    }
+
+    int dfs_max_loop(Word &u, char tail, char skip, unordered_set<string> &vis, vector<string> &res) {
+        vis.insert(u.word);
+        int ans = 0;
+        vector<string> max_res;
+        for (Word &w: v[u.tail]) {
+            if (vis.find(w.word) != vis.end()) {
+                continue;
+            }
+            vector<string> tmp;
+            int num = dfs_max_loop(w, tail, skip, vis, tmp);
+            if (ans < num) {
+                ans = num;
+                max_res = tmp;
+            }
+        }
+        if (ans > 0) {
+            res = max_res;
+            res.push_back(u.word);
+            return ans + u.weight;
+        }
+        else if (tail == '\0' || u.tail == tail) {
+            res.push_back(u.word);
+            return u.weight;
+        }
+        return 0;
     }
 };
