@@ -14,6 +14,7 @@ class Word {
         int visit_circle;
         int weight;
         vector<string> path = vector<string>();
+        Word() {}
         Word(const char *input, bool weight) {
             this->word = input;
             this->len = (int)strlen(input);

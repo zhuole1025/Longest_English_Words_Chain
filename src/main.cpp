@@ -34,7 +34,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
 
     head = 0;
     tail = 0;
-    jinz = 0;
+    jinz = -1;
     filename = "";
     loop = false;
     int i = 1;
@@ -57,7 +57,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     cerr << "Usage -h needs a letter following" << endl;
                     ret = -1;
                 }
-                head = argv[i + 1][0] | 0x20;
+                head = argv[i + 1][0] | 0x20 - 'a';
                 headc++;
                 ++i;
                 break;
@@ -66,7 +66,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     cerr << "Usage -t needs a letter following" << endl;
                     ret = -1;
                 }
-                tail = argv[i + 1][0] | 0x20;
+                tail = argv[i + 1][0] | 0x20 - 'a';
                 ++i;
                 break;
             case 'j':
@@ -74,7 +74,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     cerr << "Usage -j needs a letter following" << endl;
                     ret = -1;
                 }
-                jinz = argv[i + 1][0] | 0x20;
+                jinz = argv[i + 1][0] | 0x20 - 'a';
                 ++forbidden;
                 break;
             case 'r':
@@ -156,11 +156,11 @@ int main(int argc, char* argv[]) {
     string filename;
 
     if (DEBUG) {
-        func_type = 1;  // 1-n,2-w,3-c;
-        head = 0;
+        func_type = 2;  // 1-n,2-w,3-c;
+        head  = 0;
         tail = 0;
         jinz = 0;
-        loop = false;
+        loop = true;
         filename = "../test.txt";
     }
     else {
@@ -171,7 +171,8 @@ int main(int argc, char* argv[]) {
     }
 
 
-    string outfile = func_type == 1 ? "": "solution.txt";
+    // string outfile = func_type == 1 ? "": "solution.txt";
+    string outfile = "";
     // filename = "test.txt";
     ifstream file(filename);
     if (!file.is_open()) {
