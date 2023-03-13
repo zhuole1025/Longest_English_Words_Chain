@@ -9,10 +9,10 @@ project ("Longest_English_Words_Chain")
 ## enable_testing()
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 # 将源代码添加到此项目的可执行文件。
+add_library(core SHARED src/core.cpp src/core.h)
 add_executable (Longest_English_Words_Chain   "src/main.cpp" "src/core.h" "src/core.cpp" "src/graph.h" "src/solver.h" "src/word.h" )
-
-# add_subdirectory(src)
 
 # add_test(NAME MyTest COMMAND TestAddition)
 
