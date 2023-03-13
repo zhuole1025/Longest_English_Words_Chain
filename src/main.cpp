@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
     string filename;
 
     if (DEBUG) {
-        func_type = 2;  // 1-n,2-w,3-c;
+        func_type = 3;  // 1-n,2-w,3-c;
         head = 0;
         tail = 0;
         jinz = -1;
