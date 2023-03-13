@@ -19,6 +19,7 @@ bin/*.pdb
 *.userosscache
 *.sln.docstates
 .vscode/
+config/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
