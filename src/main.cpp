@@ -186,6 +186,7 @@ int main(int argc, char* argv[]) {
     bool loop;
     string filename;
 
+    if (INFO) cout << "processing args-------" << '\n';
     if (DEBUG) {
         func_type = 2;  // 1-n,2-w,3-c;
         head = 0;
@@ -205,6 +206,10 @@ int main(int argc, char* argv[]) {
             return -1;
         }
     }
+    if (INFO) {
+        cout << (func_type == 1 ? "gen all chains" : func_type == 2 ? "gen word chain" : "gen char chain") 
+            << " , head=" << (char)head << ", tail=" << (char)tail << ", skip=" << (int)jinz << ", enable_loop=" << loop << '\n';
+    }
 
 
     ifstream file;
@@ -217,6 +222,7 @@ int main(int argc, char* argv[]) {
         cerr << "Error: " << e.what() << endl;
         return -1;
     }
+    if (INFO) cout << "-------- file opened.\t extract words----" << '\n';
 
     // extract legal words into wordList
     vector<const char*> wordList;
@@ -230,6 +236,12 @@ int main(int argc, char* argv[]) {
         cerr << "Error: " << e.what() << endl;
         file.close();
         return -1;
+    }
+    if (INFO) {
+        for (int i = 0; i < wordList.size(); ++i) {
+            cout << wordList[i] << ' ';
+        }
+        cout << "\n-------finish extracting words.\t gen chains----" << '\n';
     }
 
     vector<char*> results(32768, 0);
@@ -250,11 +262,14 @@ int main(int argc, char* argv[]) {
         // static_assert("func_ret set wrong?!");
         break;
     }
+    if (INFO) cout << "-------finish generating chains" << '\n';
 
 
     ofstream output;
     string outfile = func_type == 1 ? "" : "solution.txt";
     ostream& out = outfile.empty() ? cout : output; // use quote?
+
+    if (INFO)   cout << "start to output" << "\nret_val = " << func_ret << ", outfile is empty ? " << outfile.empty() << '\n';
 
     // output
     if (outfile.empty()) {
@@ -262,7 +277,6 @@ int main(int argc, char* argv[]) {
         out << func_ret << '\n';
     }
     else {
-        ofstream output;
         output.open(outfile, ios::trunc | ios::out);
         if (!output.is_open()) {
             cerr << "Error: " + outfile + " cannot open!" << endl;
