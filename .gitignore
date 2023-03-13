@@ -3,6 +3,15 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Ignore all files in the bin/ directory
+!bin/
+# But include bin/*.dll and bin/*.exe
+bin/*.exp
+bin/*.ilk
+bin/*.lib
+bin/*.pdb
+
+
 # User-specific files
 *.rsuser
 *.suo
