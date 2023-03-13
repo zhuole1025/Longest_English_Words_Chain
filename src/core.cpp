@@ -1,3 +1,4 @@
+#define CORE_DLL
 #include "solver.h"
 #include "core.h"
 #include <iostream>

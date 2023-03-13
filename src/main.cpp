@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <filesystem>
+#include <stdexcept>
 #include "core.h"
 constexpr auto DEBUG = 1;
 constexpr auto INFO = 1;
@@ -16,13 +17,14 @@ bool is_valid_char(char c) {
 }
 
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
-    
-    if (argc <= 2) {
-        cout << "Usage: " << argv[0] << "[-option]+ <filename>" << std::endl;
-        return 1;
-    }
-    int ret = 0;
+    head = 0;
+    tail = 0;
+    jinz = -1;
+    filename = "";
+    loop = false;
 
+    string str = "";
+    int ret = 0;
     int all_chains = 0;
     int max_word = 0;
     int max_char = 0;
@@ -31,19 +33,27 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
     int tailc = 0;
     int forbidden = 0;
     int loopc = 0;
-
-    head = 0;
-    tail = 0;
-    jinz = -1;
-    filename = "";
-    loop = false;
     int i = 1;
+
+    if (argc <= 2) {
+        str = "Usage: " + *argv[0];
+        str += "[-option]+ <filename>";
+        goto error;
+    }
+
+
     while (i < argc) {
         if (strlen(argv[i]) == 2 && argv[i][0] == '-') {
             switch (argv[i][1])
             {
             case 'n':
                 all_chains = 1;
+                for (int j = i + 1; j < argc; ++j) {
+                    if (strlen(argv[i]) == 2 && argv[i][0] == '-' && argv[i][1] != 'n') {
+                        str = "we don't support option -n used with other options.";
+                        goto error;
+                    }
+                }
                 break;
             case 'w':
                 max_word = 1;
@@ -54,8 +64,8 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
             // head && tail : allow upper letter. not allow muti-arg 
             case 'h':
                 if (strlen(argv[i + 1]) != 1 || !is_valid_char(argv[i + 1][0])) {
-                    cerr << "Usage -h needs a letter following" << endl;
-                    ret = -1;
+                    str = "Usage -h needs a letter following";
+                    goto error;
                 }
                 head = argv[i + 1][0] | 0x20 - 'a';
                 headc++;
@@ -63,60 +73,78 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                 break;
             case 't':
                 if (strlen(argv[i + 1]) != 1 || !is_valid_char(argv[i + 1][0])) {
-                    cerr << "Usage -t needs a letter following" << endl;
-                    ret = -1;
+                    str = "Usage -t needs a letter following";
+                    goto error;
                 }
                 tail = argv[i + 1][0] | 0x20 - 'a';
+                ++tailc;
                 ++i;
                 break;
             case 'j':
                 if (strlen(argv[i + 1]) != 1 || !is_valid_char(argv[i + 1][0])) {
-                    cerr << "Usage -j needs a letter following" << endl;
-                    ret = -1;
+                    str = "Usage -j needs a letter following";
+                    goto error;
                 }
                 jinz = argv[i + 1][0] | 0x20 - 'a';
                 ++forbidden;
+                ++i;
                 break;
             case 'r':
                 loopc++;
                 loop = true;
                 break;
             default:
-                cerr << "arg not in the option" << endl;
-                ret = -1;
+                str = "arg not in the option";
+                goto error;
                 break;
             }
             
         }
         else {
             if (!filename.empty()) {
-                cerr << "process one file at a time!" << endl;
-                ret = -1;
+                str = "process one file at a time!"; 
+                goto error;
             }
-            else {
-                filename = argv[i];
-            }
+
+            filename = argv[i];
         }
         ++i;
     }
-    if (ret != -1) {
-        // �����Ͳ��������ͻ
-        if (all_chains + max_word + max_char >= 2) {
-            cerr << "-w, -n, -c should not be used together" << endl;
-            ret = -1;
-        }
-        else if (all_chains + max_word + max_char == 0) {
-            cerr << "you should use one of -w, -n, -c" << endl;
-        }
-        // �����Ͳ������� -r ���ⲻ�������ֶ��
-        else if (headc > 1 || tailc > 1 || forbidden > 1) {
-            cerr << "-h, -t, -j should be used no more than twice!" << endl;
-            ret = -1;
-        }
+    if (filename.empty()) {
+        str = "no file given!";
+        goto error;
     }
-    func_type = all_chains ? 1 : max_word ? 2 : 3;
 
+    if (all_chains + max_word + max_char >= 2) {
+        str = "option -w, -n, -c should not be used together"; goto error;
+    }
+    else if (all_chains + max_word + max_char == 0) {
+        str = "you should use one of -w, -n, -c"; goto error;
+    }
+    else if (headc > 1 || tailc > 1 || forbidden > 1) {
+        str = "-h, -t, -j should be used no more than twice!"; goto error;
+    }
+    else if (all_chains == 1 && headc + tailc + forbidden != 0) {
+
+    }
+    
+    func_type = all_chains ? 1 : max_word ? 2 : 3;
+    goto end;
+
+error:
+    throw invalid_argument(str);
+end:
     return ret;
+}
+
+ifstream open_file(const string& filename) {
+    ifstream file(filename, ios::in);
+    if (!file) {
+        throw logic_error("File<" + filename + "> does not exist!");
+    }else if (!file.is_open()) {
+        throw logic_error("Fail to open file<" + filename + ">");
+    }
+    return file;
 }
 
 vector<const char*> extract_words(ifstream& file) {
@@ -143,6 +171,9 @@ vector<const char*> extract_words(ifstream& file) {
             wordList.push_back(tmp);
         }
     }
+    if (wordList.empty()) {
+        throw runtime_error("There is no word in your input!");
+    }
     return wordList;
 }
 
@@ -164,24 +195,42 @@ int main(int argc, char* argv[]) {
         filename = "../test.txt";
     }
     else {
-        int ret = deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
-        if (ret == -1) {
-            return ret;
+        try
+        {
+            deal_with_arg(argc, argv, func_type, head, tail, jinz, loop, filename);
+        }
+        catch (const invalid_argument& e)
+        {
+            cerr << "Error: " << e.what() << std::endl;
+            return -1;
         }
     }
 
 
-    // string outfile = func_type == 1 ? "": "solution.txt";
-    string outfile = "";
-    // filename = "test.txt";
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cerr << "Error opening file " << filename << endl;
+    ifstream file;
+    try
+    {
+        file = open_file(filename);
+    }
+    catch (const exception& e)
+    {
+        cerr << "Error: " << e.what() << endl;
         return -1;
     }
 
     // extract legal words into wordList
-    vector<const char*> wordList = extract_words(file);
+    vector<const char*> wordList;
+    try
+    {
+        wordList = extract_words(file);
+        file.close();
+    }
+    catch (const exception& e)
+    {
+        cerr << "Error: " << e.what() << endl;
+        file.close();
+        return -1;
+    }
 
     vector<char*> results(32768, 0);
 
@@ -202,12 +251,9 @@ int main(int argc, char* argv[]) {
         break;
     }
 
-    // if (results.size() > 20000) {
-    //     cerr << "results.size() > 20000!" << '\n';
-    //     return -1;
-    // }
 
     ofstream output;
+    string outfile = func_type == 1 ? "" : "solution.txt";
     ostream& out = outfile.empty() ? cout : output; // use quote?
 
     // output
@@ -219,7 +265,7 @@ int main(int argc, char* argv[]) {
         ofstream output;
         output.open(outfile, ios::trunc | ios::out);
         if (!output.is_open()) {
-            cerr << outfile + " cannot open!" << endl;
+            cerr << "Error: " + outfile + " cannot open!" << endl;
             return -1;
         }
 
