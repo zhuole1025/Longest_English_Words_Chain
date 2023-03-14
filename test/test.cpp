@@ -246,8 +246,8 @@ namespace unittest
             }
         }
 
-        // unit test for gen_chain_char function in core.h case 3
-        TEST_METHOD(gen_chain_char_test3) {
+        // unit test for gen_chain_char function in core.h case 4
+        TEST_METHOD(gen_chain_char_test4) {
             const char* words[] = {"ab", "bc", "aaaaaaaa"};
             int len = 3;
             vector<char*> results(32768, 0);
@@ -261,8 +261,8 @@ namespace unittest
             }
         }
 
-        // unit test for gen_chain_char function in core.h case 3
-        TEST_METHOD(gen_chain_char_test3) {
+        // unit test for gen_chain_char function in core.h case 5
+        TEST_METHOD(gen_chain_char_test5) {
             const char* words[] = {"zzzzzz", "yz", "xy"};
             int len = 3;
             vector<char*> results(32768, 0);
