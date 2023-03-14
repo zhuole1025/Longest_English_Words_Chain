@@ -10,7 +10,7 @@ class Solver {
 
     int postprocess(vector<string> &results_tmp, char* results[]) {
         for (int i = 0; i < results_tmp.size(); i++) {
-            // results[i] = (char*)malloc(sizeof(char) * (results_tmp[i].size() + 1));
+            results[i] = (char*)malloc(sizeof(char) * (results_tmp[i].size() + 1));
             strcpy(results[i], results_tmp[i].c_str());
         }
         return results_tmp.size();
