@@ -149,6 +149,7 @@ class Graph {
 
     int get_max_word(vector<string> &results, char head, char tail, char skip, bool loop) {
         int ans = 0;
+        head = head - 'a', tail = tail - 'a', skip = skip - 'a';
         vector<int> task;
         if (skip >= 0) {
             update_graph(skip);
