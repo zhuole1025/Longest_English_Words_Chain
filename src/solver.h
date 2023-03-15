@@ -1,4 +1,5 @@
 #include <cstring>
+#include <stdexcept>
 #include "graph.h"
 
 using namespace std;
