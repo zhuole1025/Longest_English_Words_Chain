@@ -1,9 +1,9 @@
-#include <vector>
-#include <string>
-#include <algorithm>
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../src/core.h"
+#include <vector>
+#include <string>
+#include <algorithm>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -20,12 +20,12 @@ namespace unittest
         {
             const char* words[] = { "abc", "cde", "efg", "ghi" };
             int len = 4;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             int expected_ans = 6;
-            vector<string> expected_words = { "abc cde", "cde efg", "efg ghi", "abc cde efg", "cde efg ghi", "abc cde efg ghi" };
+            vector<char *> expected_words = { "abc cde", "cde efg", "efg ghi", "abc cde efg", "cde efg ghi", "abc cde efg ghi" };
             int ans = gen_chains_all(words, len, results.data());
             Assert::AreEqual(ans, expected_ans);
-            vector<string> pred_words;
+            vector<char *> pred_words;
             for (int i = 0; i < ans; i++) {
                 pred_words.push_back(results[i]);
             }
@@ -42,12 +42,12 @@ namespace unittest
         {
             const char* words[] = { "head", "delay", "element", "yale", "key" };
             int len = 8;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             int expected_ans = 5;
-            vector<string> expected_words = { "head delay", "delay yale", "yale element", "head delay yale", "delay yale element", "head delay yale element", "key yale", "key yale element" };
+            vector<char *> expected_words = { "head delay", "delay yale", "yale element", "head delay yale", "delay yale element", "head delay yale element", "key yale", "key yale element" };
             int ans = gen_chains_all(words, len, results.data());
             Assert::AreEqual(ans, expected_ans);
-            vector<string> pred_words;
+            vector<char *> pred_words;
             for (int i = 0; i < ans; i++) {
                 pred_words.push_back(results[i]);
             }
@@ -64,12 +64,12 @@ namespace unittest
         {
             const char* words[] = { "ab", "abc", "abcd", "abcde", "defg" };
             int len = 5;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             int expected_ans = 1;
-            vector<string> expected_words = { "abcd defg" };
+            vector<char *> expected_words = { "abcd defg" };
             int ans = gen_chains_all(words, len, results.data());
             Assert::AreEqual(ans, expected_ans);
-            vector<string> pred_words;
+            vector<char *> pred_words;
             for (int i = 0; i < ans; i++) {
                 pred_words.push_back(results[i]);
             }
@@ -86,11 +86,11 @@ namespace unittest
         {
             const char* words[] = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm", "ff", "bb", "uv"};
             int len = 15;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -w
             int expected_ans = 12;
-            vector<string> expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
+            vector<char *> expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
             int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -139,11 +139,11 @@ namespace unittest
         {
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
             int len = 13;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -w
             int expected_ans = 4;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick"};
+            vector<char *> expected_words = {"algebra", "apple", "elephant", "trick"};
             int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -176,11 +176,11 @@ namespace unittest
         {
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
             int len = 13;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -w -r
             int expected_ans = 6;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick", "knod", "dog"};
+            vector<char *> expected_words = {"algebra", "apple", "elephant", "trick", "knod", "dog"};
             int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, true);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -213,11 +213,11 @@ namespace unittest
         {
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
             int len = 13;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -w -j a
             int expected_ans = 3;
-            vector<string> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            vector<char *> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 'a' - 'a', false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -240,11 +240,11 @@ namespace unittest
         {
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
             int len = 13;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -c
             int expected_ans = 3;
-            vector<string> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            vector<char *> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -277,10 +277,10 @@ namespace unittest
         {
             const char* words[] = {"aaaaaaaaaaaaaaab", "cd", "de", "ef"};
             int len = 4;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             int expected_ans = 3;
-            vector<string> expected_words = {"cd", "de", "ef"};
+            vector<char *> expected_words = {"cd", "de", "ef"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -292,13 +292,13 @@ namespace unittest
         TEST_METHOD(gen_chain_char_test3) {
             const char* words[] = {"abc", "cba", "aaaaaaaaa"};
             int len = 3;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             int expected_ans = 3;
-            vector<string> expected_words = {"abc", "cba", "aaaaaaaaa"};
+            vector<char *> expected_words = {"abc", "cba", "aaaaaaaaa"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, true);
             Assert::AreEqual(ans, expected_ans);
-            vector<string> pred_words;
+            vector<char *> pred_words;
             for (int i = 0; i < ans; i++) {
                 pred_words.push_back(results[i]);
             }
@@ -314,10 +314,10 @@ namespace unittest
         TEST_METHOD(gen_chain_char_test4) {
             const char* words[] = {"ab", "bc", "aaaaaaaa"};
             int len = 3;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             int expected_ans = 3;
-            vector<string> expected_words = {"aaaaaaaa", "ab", "bc"};
+            vector<char *> expected_words = {"aaaaaaaa", "ab", "bc"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -329,10 +329,10 @@ namespace unittest
         TEST_METHOD(gen_chain_char_test5) {
             const char* words[] = {"zzzzzz", "yz", "xy"};
             int len = 3;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             int expected_ans = 3;
-            vector<string> expected_words = {"xy", "yz", "zzzzzz"};
+            vector<char *> expected_words = {"xy", "yz", "zzzzzz"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
@@ -345,11 +345,11 @@ namespace unittest
         {
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
             int len = 13;
-            vector<char*> results(32768, 0);
+            vector<char*> results(500, 0);
             
             // -c -j p
             int expected_ans = 3;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick"};
+            vector<char *> expected_words = {"algebra", "apple", "elephant", "trick"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p' - 'a', false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
