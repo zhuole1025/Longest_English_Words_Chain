@@ -13,7 +13,7 @@ bool is_valid_char(char c) {
 int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail, char& jinz, bool& loop, string& filename) {
     head = 0;
     tail = 0;
-    jinz = -1;
+    jinz = 0;
     filename = "";
     loop = false;
 
@@ -30,7 +30,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
     int i = 1;
 
     if (argc <= 2) {
-        str = "Usage: " + *argv[0];
+        str = "Usage: " + string{argv[0]};
         str += "[-option]+ <filename>";
         goto error;
     }
@@ -43,7 +43,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
             case 'n':
                 all_chains = 1;
                 for (int j = i + 1; j < argc; ++j) {
-                    if (strlen(argv[i]) == 2 && argv[i][0] == '-' && argv[i][1] != 'n') {
+                    if (strlen(argv[j]) == 2 && argv[j][0] == '-' && (argv[j][1] | 0x20) != 'n') {
                         str = "we don't support option -n used with other options.";
                         goto error;
                     }
@@ -96,6 +96,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         }
         else if (strlen(argv[i]) != 2 && argv[i][0] == '-') {
             str = "'-', a specific option should be followed.";
+            goto error;
         }
         else {
             if (!filename.empty()) {
