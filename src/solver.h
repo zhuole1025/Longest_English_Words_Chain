@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include "graph.h"
 
+using namespace std;
+
 class Solver {
     Graph *graph;
     vector<string> results_tmp;
@@ -15,9 +17,9 @@ class Solver {
             throw logic_error("Too many results.");
         }
         for (int i = 0; i < results_tmp.size(); i++) {
-            results[i] = (char*)malloc(sizeof(char) * (results_tmp[i].size() + 1));
-            strcpy_s(results[i], results_tmp.size()+1, results_tmp[i].c_str());
-            //strcpy(results[i], results_tmp[i].c_str());
+            int len = results_tmp[i].size() + 1;
+            results[i] = new char[len];
+            strcpy_s(results[i], len, results_tmp[i].c_str());
         }
         return results_tmp.size();
     }
