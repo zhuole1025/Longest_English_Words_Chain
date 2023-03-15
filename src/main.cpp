@@ -1,10 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <filesystem>
-#include <stdexcept>
+#include "main.h"
 #include "core.h"
 constexpr auto DEBUG = 1;
 constexpr auto INFO = 1;
@@ -44,7 +38,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
 
     while (i < argc) {
         if (strlen(argv[i]) == 2 && argv[i][0] == '-') {
-            switch (argv[i][1])
+            switch (argv[i][1] | 0x20)
             {
             case 'n':
                 all_chains = 1;
@@ -67,7 +61,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     str = "Usage -h needs a letter following";
                     goto error;
                 }
-                head = argv[i + 1][0] | 0x20 - 'a';
+                head = argv[i + 1][0] | 0x20;
                 headc++;
                 ++i;
                 break;
@@ -76,7 +70,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     str = "Usage -t needs a letter following";
                     goto error;
                 }
-                tail = argv[i + 1][0] | 0x20 - 'a';
+                tail = argv[i + 1][0] | 0x20;
                 ++tailc;
                 ++i;
                 break;
@@ -85,7 +79,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
                     str = "Usage -j needs a letter following";
                     goto error;
                 }
-                jinz = argv[i + 1][0] | 0x20 - 'a';
+                jinz = argv[i + 1][0] | 0x20;
                 ++forbidden;
                 ++i;
                 break;
@@ -100,6 +94,9 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
             }
             
         }
+        else if (strlen(argv[i]) != 2 && argv[i][0] == '-') {
+            str = "'-', a specific option should be followed.";
+        }
         else {
             if (!filename.empty()) {
                 str = "process one file at a time!"; 
@@ -107,6 +104,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
             }
 
             filename = argv[i];
+            filename += ".txt";
         }
         ++i;
     }
@@ -157,8 +155,9 @@ vector<const char*> extract_words(ifstream& file) {
                 word += (line[i] | 0x20); 
             }
             else if (!word.empty()) {
-                char* tmp = new char[strlen(word.c_str()) + 1];
-                strcpy(tmp, word.c_str());
+                auto size = strlen(word.c_str()) + 1;
+                char* tmp = new char[size];
+                strcpy_s(tmp, size, word.c_str());
                 wordList.push_back(tmp);
                 //cout << word.c_str() << " while wordList size: " << wordList.size() << endl;
                 word.clear();
@@ -166,8 +165,9 @@ vector<const char*> extract_words(ifstream& file) {
         }
 
         if (!word.empty()) {
-            char* tmp = new char[strlen(word.c_str()) + 1];
-            strcpy(tmp, word.c_str());
+            auto size = strlen(word.c_str()) + 1;
+            char* tmp = new char[size];
+            strcpy_s(tmp, size, word.c_str());
             wordList.push_back(tmp);
         }
     }
