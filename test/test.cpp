@@ -81,6 +81,20 @@ namespace unittest
             }
         }
 
+        // unit test for get_all function in graph.h case 4 for error
+        TEST_METHOD(gen_chains_all_test4)
+        {
+            const char* words[] = { "ab", "bc", "cd", "dea", "defg" };
+            int len = 5;
+            vector<char*> results(500, 0);
+            try {
+                int ans = gen_chains_all(words, len, results.data());
+            }
+            catch (exception& e) {
+                Assert::AreEqual(e.what(), "There is a circle in the graph.");
+            }
+        }
+
         // unit test for gen_chain_word function in core.h case 1
         TEST_METHOD(gen_chain_word_test1)
         {
@@ -91,7 +105,7 @@ namespace unittest
             // -w
             int expected_ans = 12;
             vector<char *> expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
-            int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -101,7 +115,7 @@ namespace unittest
             results.clear();
             expected_ans = 8;
             expected_words = {"ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
-            ans = gen_chain_word(words, len, results.data(), 'e' - 'a', 0, -1, false);
+            ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -111,7 +125,7 @@ namespace unittest
             results.clear();
             expected_ans = 10;
             expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'k' - 'a', -1, false);
+            ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -121,7 +135,7 @@ namespace unittest
             results.clear();
             expected_ans = 6;
             expected_words = {"ef", "fg", "gh", "hi", "ij", "jk"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'k' - 'a', -1, false);
+            ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -130,7 +144,7 @@ namespace unittest
             // -w -h b -t v
             results.clear();
             expected_ans = 0;
-            ans = gen_chain_word(words, len, results.data(), 'b' - 'a', 'v' - 'a', -1, false);
+            ans = gen_chain_word(words, len, results.data(), 'b', 'v', 0, false);
             Assert::AreEqual(ans, expected_ans);
         }
 
@@ -144,7 +158,7 @@ namespace unittest
             // -w
             int expected_ans = 4;
             vector<char *> expected_words = {"algebra", "apple", "elephant", "trick"};
-            int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -154,7 +168,7 @@ namespace unittest
             results.clear();
             expected_ans = 3;
             expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
-            ans = gen_chain_word(words, len, results.data(), 'p' - 'a', 0, -1, false);
+            ans = gen_chain_word(words, len, results.data(), 'p', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -164,7 +178,7 @@ namespace unittest
             results.clear();
             expected_ans = 2;
             expected_words = {"pseudopseudohypoparathyroidism", "medium"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'm' - 'a', -1, false);
+            ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -181,7 +195,7 @@ namespace unittest
             // -w -r
             int expected_ans = 6;
             vector<char *> expected_words = {"algebra", "apple", "elephant", "trick", "knod", "dog"};
-            int ans = gen_chain_word(words, len, results.data(), 0, 0, -1, true);
+            int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -191,17 +205,17 @@ namespace unittest
             results.clear();
             expected_ans = 4;
             expected_words = {"elephant", "trick", "knod", "dog"};
-            ans = gen_chain_word(words, len, results.data(), 'e' - 'a', 0, -1, true);
+            ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
             }
 
-            // -w -t m -r
+            // -w -t d -r
             results.clear();
             expected_ans = 6;
             expected_words = {"algebra", "apple", "elephant", "trick", "knod"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'd' - 'a', -1, true);
+            ans = gen_chain_word(words, len, results.data(), 0, 'd', 0, true);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -218,7 +232,7 @@ namespace unittest
             // -w -j a
             int expected_ans = 3;
             vector<char *> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
-            int ans = gen_chain_word(words, len, results.data(), 0, 0, 'a' - 'a', false);
+            int ans = gen_chain_word(words, len, results.data(), 0, 0, 'a', false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -228,10 +242,42 @@ namespace unittest
             results.clear();
             expected_ans = 2;
             expected_words = {"medium", "moon"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'm' - 'a', -1, false);
+            ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
+            }
+        }
+
+        // unit test for gen_chain_word function in core.h case 5 for error
+        TEST_METHOD(gen_chain_word_test5)
+        {
+            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
+            int len = 13;
+            vector<char*> results(500, 0);
+            
+            // -w
+            try {
+                int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
+            }
+            catch (exception& e) {
+                Assert::AreEqual(e.what(), "There is a circle in the graph.");
+            }
+
+            // -w -h e
+            try {
+                ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
+            }
+            catch (exception& e) {
+                Assert::AreEqual(e.what(), "There is a circle in the graph.");
+            }
+
+            // -w -t d
+            try {
+                ans = gen_chain_word(words, len, results.data(), 0, 'd', 0, false);
+            }
+            catch (exception& e) {
+                Assert::AreEqual(e.what(), "There is a circle in the graph.");
             }
         }
 
@@ -245,7 +291,7 @@ namespace unittest
             // -c
             int expected_ans = 3;
             vector<char *> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -255,7 +301,7 @@ namespace unittest
             results.clear();
             expected_ans = 3;
             expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
-            ans = gen_chain_char(words, len, results.data(), 'p' - 'a', 0, -1, false);
+            ans = gen_chain_char(words, len, results.data(), 'p', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -265,7 +311,7 @@ namespace unittest
             results.clear();
             expected_ans = 2;
             expected_words = {"pseudopseudohypoparathyroidism", "medium"};
-            ans = gen_chain_char(words, len, results.data(), 0, 'm' - 'a', -1, false);
+            ans = gen_chain_char(words, len, results.data(), 0, 'm', 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -281,7 +327,7 @@ namespace unittest
             
             int expected_ans = 3;
             vector<char *> expected_words = {"cd", "de", "ef"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -296,7 +342,7 @@ namespace unittest
             
             int expected_ans = 3;
             vector<char *> expected_words = {"abc", "cba", "aaaaaaaaa"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, true);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             vector<char *> pred_words;
             for (int i = 0; i < ans; i++) {
@@ -318,7 +364,7 @@ namespace unittest
             
             int expected_ans = 3;
             vector<char *> expected_words = {"aaaaaaaa", "ab", "bc"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -333,7 +379,7 @@ namespace unittest
             
             int expected_ans = 3;
             vector<char *> expected_words = {"xy", "yz", "zzzzzz"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, -1, false);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -350,7 +396,7 @@ namespace unittest
             // -c -j p
             int expected_ans = 3;
             vector<char *> expected_words = {"algebra", "apple", "elephant", "trick"};
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p' - 'a', false);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p', false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
@@ -360,10 +406,24 @@ namespace unittest
             results.clear();
             expected_ans = 2;
             expected_words = {"algebra", "apple", "elephant"};
-            ans = gen_chain_char(words, len, results.data(), 0, 't' - 'a', 'p' - 'a', false);
+            ans = gen_chain_char(words, len, results.data(), 0, 't', 'p', false);
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(expected_words[i], results[i]);
+            }
+        }
+
+        // unit test for gen_chain_char function in core.h case 7 for error
+        TEST_METHOD(gen_chain_char_test7) {
+            const char* words[] = {"abc", "cba", "aaaaaaaaa"};
+            int len = 3;
+            vector<char*> results(500, 0);
+            
+            try {
+                int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
+            }
+            catch (exception e) {
+                Assert::AreEqual(e.what(), "There is a circle in the graph.");
             }
         }
     };

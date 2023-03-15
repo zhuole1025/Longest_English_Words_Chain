@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #include <string>
+=======
+#include <cstring>
+>>>>>>> 81ab81ce74dc41a4a162ead92ceb4db9a72a0962
 #include <stdexcept>
 #include "graph.h"
 
