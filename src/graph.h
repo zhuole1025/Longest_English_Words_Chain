@@ -89,7 +89,7 @@ class Graph {
     bool check_circle() {
         for (int i = 0; i < NUM_POINT; i++) {
             for (Word &w: v[i]) {
-                if (dfs_circle(w)) {
+                if (!w.visit_circle && dfs_circle(w)) {
                     return true;
                 }
             }
@@ -110,6 +110,7 @@ class Graph {
                 return true;
             }
         }
+        u.visit_circle = 2;
         return false;
     }
 
