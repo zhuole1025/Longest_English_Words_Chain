@@ -33,7 +33,7 @@ namespace unittest
             sort(expected_words.begin(), expected_words.end());
 
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(pred_words[i], expected_words[i]);
+                Assert::AreEqual(0,strcmp(pred_words[i], expected_words[i]));
             }
         }
 
@@ -55,7 +55,7 @@ namespace unittest
             sort(expected_words.begin(), expected_words.end());
 
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(pred_words[i], expected_words[i]);
+                Assert::AreEqual(0,strcmp(pred_words[i], expected_words[i]));
             }
         }
 
@@ -77,7 +77,7 @@ namespace unittest
             sort(expected_words.begin(), expected_words.end());
 
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(pred_words[i], expected_words[i]);
+                Assert::AreEqual(0, strcmp(pred_words[i], expected_words[i]));
             }
         }
 
@@ -255,10 +255,10 @@ namespace unittest
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
             int len = 13;
             vector<char*> results(500, 0);
-            
+            int ans;
             // -w
             try {
-                int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
+                ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             }
             catch (exception& e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
@@ -352,7 +352,7 @@ namespace unittest
             sort(expected_words.begin(), expected_words.end());
 
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(pred_words[i], expected_words[i]);
+                Assert::AreEqual(0,strcmp(pred_words[i], expected_words[i]));
             }
         }
 
