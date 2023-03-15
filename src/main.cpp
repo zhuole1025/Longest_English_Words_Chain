@@ -192,7 +192,7 @@ int main(int argc, char* argv[]) {
         head = 0;
         tail = 0;
         jinz = -1;
-        loop = true;
+        loop = false;
         filename = "../test.txt";
     }
     else {
@@ -247,21 +247,30 @@ int main(int argc, char* argv[]) {
     vector<char*> results(32768, 0);
 
     int func_ret = 0;// TODO main func call
-    switch (func_type)
+    try
     {
-    case 1:
-        func_ret = gen_chains_all(wordList.data(), (int)wordList.size(), results.data());
-        break;
-    case 2:
-        func_ret = gen_chain_word(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
-        break;
-    case 3:
-        func_ret = gen_chain_char(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
-        break;
-    default:
-        // static_assert("func_ret set wrong?!");
-        break;
+        switch (func_type)
+        {
+        case 1:
+            func_ret = gen_chains_all(wordList.data(), (int)wordList.size(), results.data());
+            break;
+        case 2:
+            func_ret = gen_chain_word(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
+            break;
+        case 3:
+            func_ret = gen_chain_char(wordList.data(), (int)wordList.size(), results.data(), head, tail, jinz, loop);
+            break;
+        default:
+            // static_assert("func_ret set wrong?!");
+            break;
+        }
     }
+    catch (const std::logic_error& e)
+    {
+        cerr << e.what() << std::endl;
+        return -1;
+    }
+    
     if (INFO) cout << "-------finish generating chains" << '\n';
 
 

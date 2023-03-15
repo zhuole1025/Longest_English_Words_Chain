@@ -57,38 +57,38 @@ namespace maintest
         // correction test of deal_with_arg()
         TEST_METHOD(test1_deal_with_arg) {
             vector<char*> argv = { exe_file, "-n", "test" };
-            test_args(2, argv.data(), 1, 0, 0, 0, false, "test.txt");
+            test_args(3, argv.data(), 1, 0, 0, 0, false, "test.txt");
 
             argv = { exe_file,"-W", "-h", "a", "test" };
-            test_args(4, argv.data(), 2, 'a', 0, 0, false, "test.txt");
+            test_args(argv.size(), argv.data(), 2, 'a', 0, 0, false, "test.txt");
             argv = { exe_file,"-c", "-t", "B", "test" };
-            test_args(4, argv.data(), 3, '\0', 'b', 0, false, "test.txt");
+            test_args(argv.size(), argv.data(), 3, '\0', 'b', 0, false, "test.txt");
             argv = { exe_file,"-w", "-j", "c", "test" };
-            test_args(4, argv.data(), 2, '\0', '\0', 'c', false, "test.txt");
+            test_args(argv.size(), argv.data(), 2, '\0', '\0', 'c', false, "test.txt");
             argv = { "-c", "-r", "test" };
-            test_args(3, argv.data(), 3, '\0', '\0', 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 3, '\0', '\0', 0, true, "test.txt");
             argv = { exe_file, "-W", "-R", "-h", "D", "test" };
-            test_args(5, argv.data(), 2, 'd', '\0', 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 2, 'd', '\0', 0, true, "test.txt");
             argv = { exe_file, "-w", "-r", "-J", "e", "test" };
-            test_args(5, argv.data(), 2, '\0', '\0', 'e', true, "test.txt");
+            test_args(argv.size(), argv.data(), 2, '\0', '\0', 'e', true, "test.txt");
             argv = { exe_file, "-C", "-R", "-t", "F", "test" };
-            test_args(5, argv.data(), 3, '\0', 'f', 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 3, '\0', 'f', 0, true, "test.txt");
             argv = { exe_file, "-W", "-H", "g", "-t", "h", "test" };
-            test_args(6, argv.data(), 2, 'g', 'h', 0, false, "test.txt");
+            test_args(argv.size(), argv.data(), 2, 'g', 'h', 0, false, "test.txt");
             argv = { exe_file, "-w", "-r", "-j", "I","-t", "J", "test" };
-            test_args(7, argv.data(), 2, '\0', 'j', 'i', false, "test.txt");
+            test_args(argv.size(), argv.data(), 2, '\0', 'j', 'i', false, "test.txt");
             argv = { exe_file, "-C", "-r", "-h", "r", "-j", "k", "test" };
-            test_args(7, argv.data(), 3, 'r', 'k', 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 3, 'r', 'k', 0, true, "test.txt");
             argv = { exe_file, "-w", "-t", "a", "-h", "b", "-j", "b", "-r", "test" };
-            test_args(9, argv.data(), 2, 'b', 'a', 'b', true, "test.txt");
+            test_args(argv.size(), argv.data(), 2, 'b', 'a', 'b', true, "test.txt");
 
             // unusual but considered legal:
             argv = { exe_file, "-w", "-r", "-r", "test" };
-            test_args(4, argv.data(), 2, 0, 0, 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 2, 0, 0, 0, true, "test.txt");
             argv = { exe_file, "-n", "-N", "test" };
-            test_args(3, argv.data(), 1, 0, 0, 0, false, "test.txt");
+            test_args(argv.size(), argv.data(), 1, 0, 0, 0, false, "test.txt");
             argv = { exe_file, "-c", "-r", "test", "-t", "a" };
-            test_args(5, argv.data(), 3, 0, 'a', 0, true, "test.txt");
+            test_args(argv.size(), argv.data(), 3, 0, 'a', 0, true, "test.txt");
         }
 
         TEST_METHOD(test_arg_exc1) {
@@ -97,7 +97,7 @@ namespace maintest
             string expected_info = "Usage: ";
             expected_info += exe_file;
             expected_info += "[-option]+ <filename>";
-            test_arg_exception(1, argv.data(), expected_info.c_str());
+            test_arg_exception(argv.size(), argv.data(), expected_info.c_str());
         }
 
         TEST_METHOD(test_arg_exc2) {

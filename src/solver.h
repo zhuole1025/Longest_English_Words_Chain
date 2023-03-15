@@ -1,4 +1,5 @@
 #include <string>
+#include <stdexcept>
 #include "graph.h"
 
 class Solver {
