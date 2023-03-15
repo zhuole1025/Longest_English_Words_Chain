@@ -149,12 +149,14 @@ class Graph {
 
     int get_max_word(vector<string> &results, char head, char tail, char skip, bool loop) {
         int ans = 0;
-        head = head - 'a', tail = tail - 'a', skip = skip - 'a';
+        head = head == 0 ? -1 : head - 'a';
+        tail = tail == 0 ? -1 : tail - 'a';
+        skip = skip == 0 ? -1 : skip - 'a';
         vector<int> task;
         if (skip >= 0) {
             update_graph(skip);
         }
-        if (head != '\0') {
+        if (head >= 0) {
             task.push_back(head);
         }
         else {
@@ -167,14 +169,14 @@ class Graph {
                 if (loop) {
                     unordered_set<string> vis;
                     vector<string> res;
-                    int num = dfs_max_loop(u, tail, skip, vis, res);
+                    int num = dfs_max_loop(u, tail, vis, res);
                     if (ans < num) {
                         ans = num;
                         results = res;
                     }
                 }
                 else if (!u.visit){
-                    dfs_max(u, tail, skip);       
+                    dfs_max(u, tail);       
                     if (ans < u.max) {
                         ans = u.max;
                         results = u.path;
@@ -189,7 +191,7 @@ class Graph {
         return ans;
     }
 
-    void dfs_max(Word &u, char tail, char skip) {
+    void dfs_max(Word &u, char tail) {
         u.visit = true;
         int ans = 0;
         Word max_word;
@@ -198,7 +200,7 @@ class Graph {
                 continue;
             }
             if (!w.visit) {
-                dfs_max(w, tail, skip);
+                dfs_max(w, tail);
             }
             if (ans < w.max) {
                 ans = w.max;
@@ -210,13 +212,13 @@ class Graph {
             u.path.assign(max_word.path.begin(), max_word.path.end());
             u.path.push_back(u.word);
         }
-        else if (tail == '\0' || u.tail == tail) {
+        else if (tail < 0 || u.tail == tail) {
             u.max = u.weight;
             u.path.push_back(u.word);
         }
     }
 
-    int dfs_max_loop(Word &u, char tail, char skip, unordered_set<string> &vis, vector<string> &res) {
+    int dfs_max_loop(Word &u, char tail, unordered_set<string> &vis, vector<string> &res) {
         vis.insert(u.word);
         int ans = 0;
         vector<string> max_res;
@@ -225,7 +227,7 @@ class Graph {
                 continue;
             }
             vector<string> tmp;
-            int num = dfs_max_loop(w, tail, skip, vis, tmp);
+            int num = dfs_max_loop(w, tail, vis, tmp);
             if (ans < num) {
                 ans = num;
                 max_res = tmp;
@@ -236,7 +238,7 @@ class Graph {
             res.push_back(u.word);
             return ans + u.weight;
         }
-        else if (tail == '\0' || u.tail == tail) {
+        else if (tail < 0 || u.tail == tail) {
             res.push_back(u.word);
             return u.weight;
         }
