@@ -178,7 +178,7 @@ class Graph {
                 }
                 else if (!u.visit){
                     dfs_max(u, tail);       
-                    if (ans < u.max) {
+                    if (ans < u.max && u.path.size() > 1) {
                         ans = u.max;
                         results = u.path;
                     }

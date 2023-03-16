@@ -114,7 +114,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h e
@@ -128,7 +128,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t k
@@ -142,7 +142,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h e -t k
@@ -156,7 +156,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h b -t v
@@ -183,7 +183,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h p
@@ -197,7 +197,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t m
@@ -211,7 +211,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -232,7 +232,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h e -r
@@ -246,7 +246,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t e -r
@@ -260,7 +260,7 @@ namespace unittest
             }
             Assert::AreEqual(ans, expected_ans);
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -281,7 +281,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t n -j p 
@@ -295,7 +295,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -348,7 +348,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -h e
@@ -362,7 +362,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t m
@@ -376,7 +376,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -396,7 +396,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -437,7 +437,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -456,7 +456,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
@@ -477,7 +477,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
             // -w -t t -j p
@@ -491,7 +491,7 @@ namespace unittest
                 pred_words.push_back(results[i]);
             }
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], pred_words[i]);
+                Assert::AreEqual(pred_words[i], expected_words[i]);
             }
         }
 
