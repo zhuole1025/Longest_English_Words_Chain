@@ -2,6 +2,7 @@ import os
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QFileDialog, QRadioButton, QButtonGroup, QCheckBox
+import ctypes
 
 
 class MainWindow(QWidget):
@@ -10,6 +11,7 @@ class MainWindow(QWidget):
         self.initUI()
 
     def initUI(self):
+        self.option = {'h': 0, 't': 0, 'j': 0, 'r': 0}
         # elements
 
         ## file input and output
@@ -101,16 +103,16 @@ class MainWindow(QWidget):
         self.radio_btn_j.stateChanged.connect(self.on_radio_btn_j_changed)
         self.radio_btn_r.stateChanged.connect(self.on_radio_btn_r_changed)
 
-        # 设置主窗口布局
+        # set main window's layout
         self.setLayout(vbox)
 
-        # 设置主窗口属性
+        # set main window's attributes
         self.setGeometry(100, 100, 500, 400)
         self.setWindowTitle('Find word chain!')
         self.show()
 
+    # browse local files and dirs
     def open_file_dialog(self):
-        # 浏览本地文件
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)", options=options)
@@ -129,45 +131,103 @@ class MainWindow(QWidget):
 
     def on_radio_btn_h_changed(self, state):
         if state == 2:
+            self.option['h'] = 1
             self.line_input_h.show()
         else:
+            self.option['h'] = 0
             self.line_input_h.hide()
 
     def on_radio_btn_t_changed(self, state):
         if state == 2:
-            self.line_input_h.show()
+            self.option['t'] = 1
+            self.line_input_t.show()
         else:
-            self.line_input_h.hide()
+            self.option['t'] = 0
+            self.line_input_t.hide()
 
     def on_radio_btn_j_changed(self, state):
         if state == 2:
-            self.line_input_h.show()
+            self.option['j'] = 1
+            self.line_input_j.show()
         else:
-            self.line_input_h.hide()
+            self.option['t'] = 0
+            self.line_input_j.hide()
 
     def on_radio_btn_r_changed(self, state):
         if state == 2:
-            self.line_input_h.show()
+            self.option['r'] = 1
         else:
-            self.line_input_h.hide()
+            self.option['r'] = 0
+
+    def error_handler(self, exception_type, exception_value):
+        print(f"Exception: {exception_value}")
+        ctypes.pythonapi.PyErr_SetString(exception_type, str(exception_value).encode("utf-8"))
+
+    def extract_words(self, text):
+        words = []
+        length = len(text)
+        i = 0
+        while i < length:
+            j = i
+            while i < length and text[i].isalpha():
+                i = i + 1
+            if j != i:
+                words.append(text[j:i])
+            i = i + 1
+        for i in range(len(words)):
+            print(words[i])
+        return words, len(words)
 
     def submit_button_click(self):
+        C_FUNC_TYPE = ctypes.CFUNCTYPE(None, ctypes.py_object, ctypes.py_object)
+        c_func = C_FUNC_TYPE(self.error_handler)
+
+        num_rows = 20000
+        num_cols = 200
+        my_dll = ctypes.CDLL("./bin/core.dll")
+        my_dll.gen_chains_all.argtypes = [ctypes.POINTER(ctypes.c_char_p),
+                                          ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
+        my_dll.gen_chains_all.errcheck = c_func
+
         text = self.text_edit.toPlainText()
-        print("text: ", text)
-        print("h: ", self.line_input_h.text())
+
+        words, size = self.extract_words(text)
+        # switch words to c_type
+        c_words = [ctypes.c_char_p(w.encode()) for w in words]
+        # c_arr = (ctypes.c_char_p * len(words))(*c_words)
+        c_arr = ctypes.POINTER(ctypes.c_char_p)(*c_words)
+        print(type(c_arr))
+        c_len = ctypes.c_int(size)
+        result = ctypes.POINTER(ctypes.c_char_p)()
+        # result = (ctypes.c_char_p * num_rows)()
+        # for i in range(num_rows):
+        #     result[i] = ctypes.c_char_p()
+        print(type(result))
+        # print(type(result[0]))
+
+        ans = -1
+        try:
+            ans = my_dll.gen_chains_all(c_arr, size, result)
+        except Exception as e:
+            print(f"Error: {e}")
+        print(ans)
+        for i in range(ans):
+            print(result[i].decode('utf-8'))
+        # print("text: ", text)
+        # print("h: ", self.line_input_h.text())
         # self.text_edit.hide()
         self.output_text.show()
         self.export_button.show()
         if self.radio_btn_n.isChecked():
-            print('您选择了 n')
+            print('')
         elif self.radio_btn_w.isChecked():
-            print('您选择了 w')
-
-        self.output_text.append("需要输出的内容")
+            print('')
+        del my_dll
+        self.output_text.clear()
+        self.output_text.append("contents")
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainWindow()
     sys.exit(app.exec_())
-

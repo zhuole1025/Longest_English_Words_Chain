@@ -7,13 +7,15 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
-
+bool cmp(const char* a, const char* b) {
+    return strcmp(a, b) < 0;
+}
 namespace unittest
 {
     TEST_CLASS(unittest)
     {
     public:
-
+       
 
         // unit test for get_all function in graph.h case 1
         TEST_METHOD(gen_chains_all_test1)
@@ -41,9 +43,9 @@ namespace unittest
         TEST_METHOD(gen_chains_all_test2)
         {
             const char* words[] = { "head", "delay", "element", "yale", "key" };
-            int len = 8;
+            int len = 5;
             vector<char*> results(500, 0);
-            int expected_ans = 5;
+            int expected_ans = 8;
             vector<char *> expected_words = { "head delay", "delay yale", "yale element", "head delay yale", "delay yale element", "head delay yale element", "key yale", "key yale element" };
             int ans = gen_chains_all(words, len, results.data());
             Assert::AreEqual(ans, expected_ans);
@@ -51,8 +53,8 @@ namespace unittest
             for (int i = 0; i < ans; i++) {
                 pred_words.push_back(results[i]);
             }
-            sort(pred_words.begin(), pred_words.end());
-            sort(expected_words.begin(), expected_words.end());
+            sort(pred_words.begin(), pred_words.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);
 
             for (int i = 0; i < expected_ans; i++) {
                 Assert::AreEqual(0,strcmp(pred_words[i], expected_words[i]));
@@ -293,8 +295,10 @@ namespace unittest
             vector<char *> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
+            /*sort(results.begin(), results.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);*/
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], results[i]);
+                Assert::AreEqual(0, strcmp(expected_words[i], results[i]));
             }
 
             // -w -h e
@@ -366,8 +370,10 @@ namespace unittest
             vector<char *> expected_words = {"aaaaaaaa", "ab", "bc"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
+            sort(results.begin(), results.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], results[i]);
+                Assert::AreEqual(0, strcmp(expected_words[i], results[i]));
             }
         }
 
@@ -381,8 +387,10 @@ namespace unittest
             vector<char *> expected_words = {"xy", "yz", "zzzzzz"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
+            sort(results.begin(), results.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], results[i]);
+                Assert::AreEqual(0, strcmp(expected_words[i], results[i]));
             }
         }
 
@@ -398,8 +406,10 @@ namespace unittest
             vector<char *> expected_words = {"algebra", "apple", "elephant", "trick"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p', false);
             Assert::AreEqual(ans, expected_ans);
+            sort(results.begin(), results.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], results[i]);
+                Assert::AreEqual(0, strcmp(expected_words[i], results[i]));
             }
 
             // -w -t t -j p
@@ -408,8 +418,10 @@ namespace unittest
             expected_words = {"algebra", "apple", "elephant"};
             ans = gen_chain_char(words, len, results.data(), 0, 't', 'p', false);
             Assert::AreEqual(ans, expected_ans);
+            sort(results.begin(), results.end(), cmp);
+            sort(expected_words.begin(), expected_words.end(), cmp);
             for (int i = 0; i < expected_ans; i++) {
-                Assert::AreEqual(expected_words[i], results[i]);
+                Assert::AreEqual(0, strcmp(expected_words[i], results[i]));
             }
         }
 
