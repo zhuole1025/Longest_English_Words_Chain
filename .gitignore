@@ -6,6 +6,7 @@
 # Ignore all files in the bin/ directory
 # !bin/
 bin/
+.idea/
 # But include bin/*.dll and bin/*.exe
 # bin/*.exp
 # bin/*.ilk
