@@ -130,11 +130,11 @@ namespace unittest
                 Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
-            // -w -t k
+            // -w -t g
             
-            expected_ans = 12;
-            expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
+            expected_ans = 8;
+            expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg"};
+            ans = gen_chain_word(words, len, results.data(), 0, 'g', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
             for (int i = 0; i < ans; i++) {
@@ -283,11 +283,11 @@ namespace unittest
                 Assert::AreEqual(pred_words[i], expected_words[i]);
             }
 
-            // -w -t n -j p 
+            // -w -t n -j a
             
-            expected_ans = 2;
-            expected_words = {"medium", "moon"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
+            expected_ans = 3;
+            expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            ans = gen_chain_word(words, len, results.data(), 0, 'n', 'a', false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
             for (int i = 0; i < ans; i++) {
