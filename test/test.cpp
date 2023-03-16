@@ -131,7 +131,7 @@ namespace unittest
             }
 
             // -w -t k
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 12;
             expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk"};
             ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
@@ -145,7 +145,7 @@ namespace unittest
             }
 
             // -w -h e -t k
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 7;
             expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk"};
             ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
@@ -159,7 +159,7 @@ namespace unittest
             }
 
             // -w -h b -t v
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 0;
             ans = gen_chain_word(words, len, results.data(), 'b', 'v', 0, false);
             Assert::AreEqual(ans, expected_ans);
@@ -186,7 +186,7 @@ namespace unittest
             }
 
             // -w -h p
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 3;
             expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
             ans = gen_chain_word(words, len, results.data(), 'p', 0, 0, false);
@@ -200,7 +200,7 @@ namespace unittest
             }
 
             // -w -t m
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 2;
             expected_words = {"pseudopseudohypoparathyroidism", "medium"};
             ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
@@ -235,7 +235,7 @@ namespace unittest
             }
 
             // -w -h e -r
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 4;
             expected_words = {"elephant", "trick", "knee", "egg"};
             ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, true);
@@ -249,7 +249,7 @@ namespace unittest
             }
 
             // -w -t e -r
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 5;
             expected_words = {"algebra", "apple", "elephant", "trick", "knee"};
             ans = gen_chain_word(words, len, results.data(), 0, 'e', 0, true);
@@ -284,7 +284,7 @@ namespace unittest
             }
 
             // -w -t n -j p 
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 2;
             expected_words = {"medium", "moon"};
             ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
@@ -351,7 +351,7 @@ namespace unittest
             }
 
             // -c -h p
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 3;
             expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
             ans = gen_chain_char(words, len, results.data(), 'p', 0, 0, false);
@@ -365,7 +365,7 @@ namespace unittest
             }
 
             // -c -t m
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 2;
             expected_words = {"pseudopseudohypoparathyroidism", "medium"};
             ans = gen_chain_char(words, len, results.data(), 0, 'm', 0, false);
@@ -480,7 +480,7 @@ namespace unittest
             }
 
             // -w -t t -j p
-            Assert::AreEqual(pred_words[i], expected_words[i]);
+            
             expected_ans = 3;
             expected_words = {"algebra", "apple", "elephant"};
             ans = gen_chain_char(words, len, results.data(), 0, 't', 'p', false);
