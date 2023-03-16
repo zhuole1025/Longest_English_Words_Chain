@@ -468,7 +468,7 @@ namespace unittest
             vector<char*> results(500, 0);
             
             // -c -j p
-            int expected_ans = 3;
+            int expected_ans = 4;
             vector<string> expected_words = {"algebra", "apple", "elephant", "trick"};
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p', false);
             Assert::AreEqual(ans, expected_ans);
@@ -482,7 +482,7 @@ namespace unittest
 
             // -w -t t -j p
             results.clear();
-            expected_ans = 2;
+            expected_ans = 3;
             expected_words = {"algebra", "apple", "elephant"};
             ans = gen_chain_char(words, len, results.data(), 0, 't', 'p', false);
             Assert::AreEqual(ans, expected_ans);
