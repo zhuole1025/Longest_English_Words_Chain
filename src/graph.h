@@ -171,7 +171,7 @@ class Graph {
                     unordered_set<string> vis;
                     vector<string> res;
                     int num = dfs_max_loop(u, tail, vis, res);
-                    if (ans < num) {
+                    if (ans < num && res.size() > 1) {
                         ans = num;
                         results = res;
                     }

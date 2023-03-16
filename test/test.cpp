@@ -105,8 +105,8 @@ namespace unittest
             vector<char*> results(500, 0);
             
             // -w
-            int expected_ans = 12;
-            vector<string> expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
+            int expected_ans = 14;
+            vector<string> expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -119,8 +119,8 @@ namespace unittest
 
             // -w -h e
             results.clear();
-            expected_ans = 8;
-            expected_words = {"ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
+            expected_ans = 9;
+            expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
             ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -133,8 +133,8 @@ namespace unittest
 
             // -w -t k
             results.clear();
-            expected_ans = 10;
-            expected_words = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk"};
+            expected_ans = 12;
+            expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk"};
             ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -147,8 +147,8 @@ namespace unittest
 
             // -w -h e -t k
             results.clear();
-            expected_ans = 6;
-            expected_words = {"ef", "fg", "gh", "hi", "ij", "jk"};
+            expected_ans = 7;
+            expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk"};
             ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
