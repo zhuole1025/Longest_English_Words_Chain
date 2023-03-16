@@ -148,7 +148,7 @@ namespace unittest
             
             expected_ans = 7;
             expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk"};
-            ans = gen_chain_word(words, len, results.data(), 0, 'k', 0, false);
+            ans = gen_chain_word(words, len, results.data(), 'e', 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
             for (int i = 0; i < ans; i++) {
