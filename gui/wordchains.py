@@ -1,5 +1,8 @@
+import datetime
 import os
 import sys
+import time
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QFileDialog, QRadioButton, QButtonGroup, QCheckBox, QMessageBox
 from ctypes import *
@@ -21,8 +24,8 @@ def extract_words(text):
         if j != i:
             words.append(text[j:i])
         i = i + 1
-    for i in range(len(words)):
-        print(words[i])
+    # for i in range(len(words)):
+    #     print(words[i])
     return words, len(words)
 
 
@@ -56,7 +59,7 @@ def gen_chains_all(words, len_):
     res = []
     for i in range(ans):
         # print(result_ptr[i])
-        print(result_ptr[i].decode('utf-8'))
+        # print(result_ptr[i].decode('utf-8'))
         res.append(result_ptr[i].decode('utf-8'))
     del my_dll_
     return res, ans
@@ -80,7 +83,7 @@ def gen_chain_word_or_char(type_, words, len_, head, tail, skip, enable_loop):
 
     res = []
     for i in range(ans):
-        print(result_ptr[i].decode('utf-8'))
+        # print(result_ptr[i].decode('utf-8'), end=" ")
         res.append(result_ptr[i].decode('utf-8'))
     del my_dll_
     return res, ans
@@ -135,6 +138,9 @@ class MainWindow(QWidget):
         self.line_input_t.hide()
         self.line_input_j.hide()
 
+        self.time_label = QLabel('', self)
+        self.time_label.hide()
+
         # horizontal layout
         file_layout = QHBoxLayout()
         file_layout.addWidget(self.file_path_label)
@@ -183,6 +189,7 @@ class MainWindow(QWidget):
 
         vbox.addLayout(text_edit_layout)
         vbox.addWidget(self.text_edit)
+        vbox.addWidget(self.time_label)
         vbox.addWidget(self.output_text)
         vbox.addWidget(self.export_button)
         # self.export_button.hide()
@@ -284,19 +291,22 @@ class MainWindow(QWidget):
     def submit_button_click(self):
         self.output_text.clear()
         text = self.text_edit.toPlainText()
+        start_time = time.perf_counter()
         words, size = extract_words(text)
         result = []
         sign = 0
         head = 0
         tail = 0
         skip = 0
+        if self.radio_btn_n.isChecked() and self.option['h'] + self.option['t'] + self.option['j'] + self.option['r'] > 0:
+            self.throw_error_msg("option '-n' should not be used with other options.")
         if self.option['h'] == 1:
             content = self.line_input_h.text()
             if len(content) != 1:
                 self.throw_error_msg("option '-h' needs a single letter.")
             else:
                 head = content[0]
-                print(head, type(head))
+                # print(head, type(head))
         if self.option['t'] == 1:
             content = self.line_input_t.text()
             if len(content) != 1:
@@ -319,10 +329,18 @@ class MainWindow(QWidget):
             result, sign = gen_chain_word_or_char('c', words, size, head, tail, skip, loop)
         else:
             self.throw_error_msg("you need to choose one of the upper options:ALL, WORD, CHAR.")
-        print(sign)
+        # print(sign)
+        end_time = time.perf_counter()
         if sign == -1:
             self.throw_error_msg("a circle is detected but is not allowed.")
+        elif sign == 0:
+            self.throw_error_msg("no chains satisfied your requirements, please modify your input.")
         else:
+            run_time = end_time - start_time
+            self.time_label.setText(f"program running time: {run_time:.6f} seconds.\n")
+            self.time_label.show()
+            if self.radio_btn_n.isChecked():
+                self.output_text.append("total number of chains: " + sign)
             for i in range(len(result)):
                 self.output_text.append(result[i])
             self.output_text.show()
