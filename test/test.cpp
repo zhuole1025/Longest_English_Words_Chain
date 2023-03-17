@@ -306,7 +306,6 @@ namespace unittest
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
             int len = 13;
             vector<char*> results(500, 0);
-            int ans;
             // -w
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(-1, ans);
