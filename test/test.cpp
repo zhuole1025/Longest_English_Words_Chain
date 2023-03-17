@@ -89,12 +89,14 @@ namespace unittest
             const char* words[] = { "ab", "bc", "cd", "dea", "defg" };
             int len = 5;
             vector<char*> results(500, 0);
-            try {
+            int ans = gen_chains_all(words, len, results.data());
+            Assert::AreEqual(-1, ans);
+            /*try {
                 int ans = gen_chains_all(words, len, results.data());
             }
             catch (exception& e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
-            }
+            }*/
         }
 
         // unit test for gen_chain_word function in core.h case 1
@@ -304,30 +306,34 @@ namespace unittest
             const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
             int len = 13;
             vector<char*> results(500, 0);
-            int ans;
             // -w
-            try {
+            int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
+            Assert::AreEqual(-1, ans);
+            /*try {
                 ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             }
             catch (exception& e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
-            }
+            }*/
 
             // -w -h e
-            try {
-                ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
+            ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
+            Assert::AreEqual(-1, ans);
+            /*try {
             }
             catch (exception& e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
-            }
+            }*/
 
             // -w -t d
-            try {
+            ans = gen_chain_word(words, len, results.data(), 0, 'd', 0, false);
+            Assert::AreEqual(-1, ans);
+            /*try {
                 ans = gen_chain_word(words, len, results.data(), 0, 'd', 0, false);
             }
             catch (exception& e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
-            }
+            }*/
         }
 
         // unit test for gen_chain_char function in core.h case 1
@@ -499,13 +505,15 @@ namespace unittest
             const char* words[] = {"abc", "cba", "aaaaaaaaa"};
             int len = 3;
             vector<char*> results(500, 0);
-            
-            try {
+
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
+            Assert::AreEqual(-1, ans);
+            /*try {
                 int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
             }
             catch (exception e) {
                 Assert::AreEqual(e.what(), "There is a circle in the graph.");
-            }
+            }*/
         }
     };
 

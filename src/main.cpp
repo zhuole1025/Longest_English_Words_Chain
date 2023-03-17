@@ -151,6 +151,7 @@ vector<const char*> extract_words(ifstream& file) {
     string line, word;
 
     while (getline(file, line)) {
+        word.clear();
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
                 word += (line[i] | 0x20); 
@@ -270,6 +271,13 @@ int main(int argc, char* argv[]) {
     {
         cerr << e.what() << std::endl;
         return -1;
+    }
+
+    if (func_ret == -1) {
+        cerr << "Error: There is a circle in the graph." << '\n';
+    }
+    else if (func_ret == -2) {
+        cerr << "Error: Too many results." << '\n';
     }
     
     if (INFO) cout << "-------finish generating chains" << '\n';

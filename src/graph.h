@@ -120,13 +120,13 @@ class Graph {
             for (Word &w: v[i]) {
                 vector<string> tmp;
                 tmp.push_back(w.word);
-                dfs_all(results, w, tmp, false);
+                dfs_all(results, w, tmp);
             }
         }
         return 0;
     }
 
-    void dfs_all(vector<string> &results, Word &u, vector<string> &ans, bool loop) {
+    void dfs_all(vector<string> &results, Word &u, vector<string> &ans) {
         if (ans.size() > 1) {
             string str = "";
             for (string &s: ans) {
@@ -140,11 +140,11 @@ class Graph {
             results.push_back(str);
         }
         for (Word &w: v[u.tail]) {
-            if (w.word == u.word && loop) {
+            if (w.word == u.word) {
                 continue;
             }
             ans.push_back(w.word);
-            dfs_all(results, w, ans, u.word == w.word);
+            dfs_all(results, w, ans);
             ans.pop_back();
         }
     }

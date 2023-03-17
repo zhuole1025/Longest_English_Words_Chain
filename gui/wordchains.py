@@ -1,8 +1,89 @@
 import os
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
-    QFileDialog, QRadioButton, QButtonGroup, QCheckBox
-import ctypes
+    QFileDialog, QRadioButton, QButtonGroup, QCheckBox, QMessageBox
+from ctypes import *
+
+# C_FUNC_TYPE = CFUNCTYPE(None, py_object, py_object)
+# c_func = C_FUNC_TYPE(error_handler)
+num_rows = 20005
+num_cols = 200
+
+
+def extract_words(text):
+    words = []
+    length = len(text)
+    i = 0
+    while i < length:
+        j = i
+        while i < length and text[i].isalpha():
+            i = i + 1
+        if j != i:
+            words.append(text[j:i])
+        i = i + 1
+    for i in range(len(words)):
+        print(words[i])
+    return words, len(words)
+
+
+# def error_handler(exception_type, exception_value, traceback):
+#     print(f"Exception: {exception_value}")
+#     print(traceback)
+#     pythonapi.PyErr_SetString(exception_type, str(exception_value).encode("utf-8"))
+
+
+# switch words to c_type
+def process_words(words):
+    c_words = [c_char_p(w.encode()) for w in words]
+    c_arr = (c_char_p * len(words))(*c_words)
+    # print(type(c_arr))
+    return c_arr
+
+
+def gen_chains_all(words, len_):
+    ans = -1
+    my_dll_ = CDLL("../bin/core.dll")
+    func = my_dll_.gen_chains_all
+    func.argtype = [(c_char_p * num_rows)(), c_int, (c_char_p * num_rows)()]
+    func.restype = c_int
+    # func.errcheck = error_handler
+
+    c_arr = process_words(words)
+    c_len = c_int(len_)
+    result_ptr = (c_char_p * num_rows)()
+    ans = func(c_arr, c_len, result_ptr)
+    # print(ans)
+    res = []
+    for i in range(ans):
+        # print(result_ptr[i])
+        print(result_ptr[i].decode('utf-8'))
+        res.append(result_ptr[i].decode('utf-8'))
+    del my_dll_
+    return res, ans
+
+
+def gen_chain_word_or_char(type_, words, len_, head, tail, skip, enable_loop):
+    ans = -1
+    my_dll_ = CDLL("../bin/core.dll")
+    func = my_dll_.gen_chain_word if type_ == 'w' else my_dll_.gen_chain_char
+    # func.restype = c_int
+    # func.errcheck = c_func
+
+    c_arr = process_words(words)
+    c_len = c_int(len_)
+    c_head = c_char(head)
+    c_tail = c_char(tail)
+    c_skip = c_char(skip)
+    c_enable_loop = c_bool(enable_loop)
+    result_ptr = (c_char_p * num_rows)()
+    ans = func(c_arr, c_len, result_ptr, c_head, c_tail, c_skip, c_enable_loop)
+
+    res = []
+    for i in range(ans):
+        print(result_ptr[i].decode('utf-8'))
+        res.append(result_ptr[i].decode('utf-8'))
+    del my_dll_
+    return res, ans
 
 
 class MainWindow(QWidget):
@@ -21,9 +102,12 @@ class MainWindow(QWidget):
         self.browse_button.clicked.connect(self.open_file_dialog)
 
         self.text_edit = QTextEdit()
+        self.text_edit.setPlaceholderText("write down words or open a file to get word chain.")
+        self.input_clear_button = QPushButton("Clear input content")
 
         self.output_text = QTextEdit()
         self.output_text.setReadOnly(True)
+        self.output_text.setPlaceholderText("output is here.")
         self.export_button = QPushButton("Export")
         self.export_button.clicked.connect(self.on_export_btn_click)
 
@@ -42,8 +126,14 @@ class MainWindow(QWidget):
         self.radio_btn_r = QCheckBox('r', self)
         ### input char
         self.line_input_h = QLineEdit(self)
+        self.line_input_h.setPlaceholderText("set word chain to start with this letter")
         self.line_input_t = QLineEdit(self)
+        self.line_input_t.setPlaceholderText("set word chain to end with this letter")
         self.line_input_j = QLineEdit(self)
+        self.line_input_j.setPlaceholderText("set word chain to NOT start with this letter")
+        self.line_input_h.hide()
+        self.line_input_t.hide()
+        self.line_input_j.hide()
 
         # horizontal layout
         file_layout = QHBoxLayout()
@@ -76,6 +166,10 @@ class MainWindow(QWidget):
         func_j_layout.addWidget(self.radio_btn_j)
         func_j_layout.addWidget(self.line_input_j)
 
+        text_edit_layout = QHBoxLayout()
+        text_edit_layout.addWidget(self.radio_btn_r)
+        text_edit_layout.addWidget(self.input_clear_button)
+
         # vertical layout
         vbox = QVBoxLayout()
         vbox.addLayout(file_layout)
@@ -85,19 +179,21 @@ class MainWindow(QWidget):
         vbox.addLayout(func_h_layout)
         vbox.addLayout(func_t_layout)
         vbox.addLayout(func_j_layout)
-        vbox.addWidget(self.radio_btn_r)
+        # vbox.addWidget(self.radio_btn_r)
 
+        vbox.addLayout(text_edit_layout)
         vbox.addWidget(self.text_edit)
         vbox.addWidget(self.output_text)
         vbox.addWidget(self.export_button)
-        self.export_button.hide()
-        self.output_text.hide()
+        # self.export_button.hide()
+        # self.output_text.hide()
 
         # button actions
         # self.line_input_h.hide()
         # self.line_input_t.hide()
         # self.line_input_j.hide()
         # self.radio_button_h.stateChanged.connect(self.on_radio_button_h_changed)
+        self.input_clear_button.clicked.connect(self.text_edit.clear)
         self.radio_btn_h.stateChanged.connect(self.on_radio_btn_h_changed)
         self.radio_btn_t.stateChanged.connect(self.on_radio_btn_t_changed)
         self.radio_btn_j.stateChanged.connect(self.on_radio_btn_j_changed)
@@ -107,7 +203,7 @@ class MainWindow(QWidget):
         self.setLayout(vbox)
 
         # set main window's attributes
-        self.setGeometry(100, 100, 500, 400)
+        self.setGeometry(600, 200, 500, 400)
         self.setWindowTitle('Find word chain!')
         self.show()
 
@@ -159,72 +255,78 @@ class MainWindow(QWidget):
         else:
             self.option['r'] = 0
 
-    def error_handler(self, exception_type, exception_value):
-        print(f"Exception: {exception_value}")
-        ctypes.pythonapi.PyErr_SetString(exception_type, str(exception_value).encode("utf-8"))
+    def check_line_input_h(self):
+        content = self.line_input_h.text()
+        if len(content) != 1:
+            content = "option '-h' needs a single letter."
+        return content
 
-    def extract_words(self, text):
-        words = []
-        length = len(text)
-        i = 0
-        while i < length:
-            j = i
-            while i < length and text[i].isalpha():
-                i = i + 1
-            if j != i:
-                words.append(text[j:i])
-            i = i + 1
-        for i in range(len(words)):
-            print(words[i])
-        return words, len(words)
+    def check_line_input_t(self):
+        content = self.line_input_t.text()
+        if len(content) != 1:
+            content = "option '-t' needs a single letter."
+        return content
+
+    def check_line_input_j(self):
+        content = self.line_input_j.text()
+        if len(content) != 1:
+            content = "option '-j' needs a single letter."
+        return content
+
+    def throw_error_msg(self, str):
+        error_box = QMessageBox()
+        error_box.setIcon(QMessageBox.Critical)
+        error_box.setWindowTitle("Error")
+        error_box.setText("Error occurs:")
+        error_box.setInformativeText(str)
+        error_box.exec_()
 
     def submit_button_click(self):
-        C_FUNC_TYPE = ctypes.CFUNCTYPE(None, ctypes.py_object, ctypes.py_object)
-        c_func = C_FUNC_TYPE(self.error_handler)
-
-        num_rows = 20000
-        num_cols = 200
-        my_dll = ctypes.CDLL("./bin/core.dll")
-        my_dll.gen_chains_all.argtypes = [ctypes.POINTER(ctypes.c_char_p),
-                                          ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
-        my_dll.gen_chains_all.errcheck = c_func
-
-        text = self.text_edit.toPlainText()
-
-        words, size = self.extract_words(text)
-        # switch words to c_type
-        c_words = [ctypes.c_char_p(w.encode()) for w in words]
-        # c_arr = (ctypes.c_char_p * len(words))(*c_words)
-        c_arr = ctypes.POINTER(ctypes.c_char_p)(*c_words)
-        print(type(c_arr))
-        c_len = ctypes.c_int(size)
-        result = ctypes.POINTER(ctypes.c_char_p)()
-        # result = (ctypes.c_char_p * num_rows)()
-        # for i in range(num_rows):
-        #     result[i] = ctypes.c_char_p()
-        print(type(result))
-        # print(type(result[0]))
-
-        ans = -1
-        try:
-            ans = my_dll.gen_chains_all(c_arr, size, result)
-        except Exception as e:
-            print(f"Error: {e}")
-        print(ans)
-        for i in range(ans):
-            print(result[i].decode('utf-8'))
-        # print("text: ", text)
-        # print("h: ", self.line_input_h.text())
-        # self.text_edit.hide()
-        self.output_text.show()
-        self.export_button.show()
-        if self.radio_btn_n.isChecked():
-            print('')
-        elif self.radio_btn_w.isChecked():
-            print('')
-        del my_dll
         self.output_text.clear()
-        self.output_text.append("contents")
+        text = self.text_edit.toPlainText()
+        words, size = extract_words(text)
+        result = []
+        sign = 0
+        head = 0
+        tail = 0
+        skip = 0
+        if self.option['h'] == 1:
+            content = self.line_input_h.text()
+            if len(content) != 1:
+                self.throw_error_msg("option '-h' needs a single letter.")
+            else:
+                head = content[0]
+                print(head, type(head))
+        if self.option['t'] == 1:
+            content = self.line_input_t.text()
+            if len(content) != 1:
+                self.throw_error_msg("option '-t' needs a single letter.")
+            else:
+                tail = content[0]
+        if self.option['j'] == 1:
+            content = self.line_input_j.text()
+            if len(content) != 1:
+                self.throw_error_msg("option '-j' needs a single letter.")
+            else:
+                skip = content[0]
+        loop = True if self.option['r'] == 1 else False
+
+        if self.radio_btn_n.isChecked():
+            result, sign = gen_chains_all(words, size)
+        elif self.radio_btn_w.isChecked():
+            result, sign = gen_chain_word_or_char('w', words, size, head, tail, skip, loop)
+        elif self.radio_btn_c.isChecked():
+            result, sign = gen_chain_word_or_char('c', words, size, head, tail, skip, loop)
+        else:
+            self.throw_error_msg("you need to choose one of the upper options:ALL, WORD, CHAR.")
+        print(sign)
+        if sign == -1:
+            self.throw_error_msg("a circle is detected but is not allowed.")
+        else:
+            for i in range(len(result)):
+                self.output_text.append(result[i])
+            self.output_text.show()
+            self.export_button.show()
 
 
 if __name__ == '__main__':
