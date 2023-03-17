@@ -2,6 +2,7 @@
 #include <stack>
 #include <string>
 #include <unordered_set>
+#include <omp.h>
 #include "word.h"
 
 using namespace std;
@@ -165,22 +166,30 @@ class Graph {
                 task.push_back(i);
             }
         }
-        for (int i: task) {
-            for (Word &u: v[i]) {
-                if (loop) {
+        if (loop) {
+            #pragma omp parallel for schedule(dynamic)
+            for (int i: task) {
+                for (Word &u: v[i]) {
                     unordered_set<string> vis;
                     vector<string> res;
                     int num = dfs_max_loop(u, tail, vis, res);
+                    #pragma omp critical
                     if (ans < num && res.size() > 1) {
                         ans = num;
                         results = res;
                     }
                 }
-                else if (!u.visit){
-                    dfs_max(u, tail);       
-                    if (ans < u.max && u.path.size() > 1) {
-                        ans = u.max;
-                        results = u.path;
+            }
+        }
+        else {
+            for (int i: task) {
+                for (Word &u: v[i]) {
+                    if (!u.visit){
+                        dfs_max(u, tail);       
+                        if (ans < u.max && u.path.size() > 1) {
+                            ans = u.max;
+                            results = u.path;
+                        }
                     }
                 }
             }
