@@ -168,13 +168,15 @@ class Graph {
         }
         if (loop) {
             #pragma omp parallel for schedule(dynamic)
-            for (int i: task) {
+            for (int i: task) 
+            {
                 for (Word &u: v[i]) {
                     unordered_set<string> vis;
                     vector<string> res;
                     int num = dfs_max_loop(u, tail, vis, res);
+                    if (ans < num && res.size() > 1) 
                     #pragma omp critical
-                    if (ans < num && res.size() > 1) {
+                    {
                         ans = num;
                         results = res;
                     }
