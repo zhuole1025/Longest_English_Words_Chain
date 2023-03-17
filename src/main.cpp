@@ -272,6 +272,13 @@ int main(int argc, char* argv[]) {
         cerr << e.what() << std::endl;
         return -1;
     }
+
+    if (func_ret == -1) {
+        cerr << "Error: There is a circle in the graph." << '\n';
+    }
+    else if (func_ret == -2) {
+        cerr << "Error: Too many results." << '\n';
+    }
     
     if (INFO) cout << "-------finish generating chains" << '\n';
 

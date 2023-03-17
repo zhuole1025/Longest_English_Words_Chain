@@ -2,7 +2,93 @@ import os
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QHBoxLayout, QVBoxLayout, \
     QFileDialog, QRadioButton, QButtonGroup, QCheckBox
-import ctypes
+from ctypes import *
+
+# C_FUNC_TYPE = CFUNCTYPE(None, py_object, py_object)
+# c_func = C_FUNC_TYPE(error_handler)
+num_rows = 20005
+num_cols = 200
+
+
+def extract_words(text):
+    words = []
+    length = len(text)
+    i = 0
+    while i < length:
+        j = i
+        while i < length and text[i].isalpha():
+            i = i + 1
+        if j != i:
+            words.append(text[j:i])
+        i = i + 1
+    for i in range(len(words)):
+        print(words[i])
+    return words, len(words)
+
+
+def error_handler(exception_type, exception_value, traceback):
+    print(f"Exception: {exception_value}")
+    print(traceback)
+    pythonapi.PyErr_SetString(exception_type, str(exception_value).encode("utf-8"))
+
+
+# switch words to c_type
+def process_words(words):
+    c_words = [c_char_p(w.encode()) for w in words]
+    c_arr = (c_char_p * len(words))(*c_words)
+    # print(type(c_arr))
+    return c_arr
+
+
+def gen_chains_all(words, len_):
+    ans = -1
+    my_dll_ = CDLL("./bin/core.dll")
+    func = my_dll_.gen_chains_all
+    func.argtype = [(c_char_p * num_rows)(), c_int, (c_char_p * num_rows)()]
+    func.restype = c_int
+    func.errcheck = error_handler
+
+    c_arr = process_words(words)
+    c_len = c_int(len_)
+    result_ptr = (c_char_p * num_rows)()
+    try:
+        ans = func(c_arr, c_len, result_ptr)
+    except Exception as e:
+        print(f" myError: {e}")
+    # print(ans)
+    res = []
+    for i in range(ans):
+        print(result_ptr[i])
+        # print(result_ptr[i].decode('utf-8'))
+        res.append(result_ptr[i].decode('utf-8'))
+    del my_dll_
+    return res
+
+
+def gen_chain_word_or_char(type_, words, len_, head, tail, skip, enable_loop):
+    ans = -1
+    my_dll_ = CDLL("./bin/core.dll")
+    func = my_dll_.gen_chain_word if type_ == 'w' else my_dll_.gen_chain_char
+    # func.restype = c_int
+    # func.errcheck = c_func
+
+    c_arr = process_words(words)
+    c_len = c_int(len_)
+    c_head = c_char(head)
+    c_tail = c_char(tail)
+    c_skip = c_char(skip)
+    c_enable_loop = c_bool(enable_loop)
+    result_ptr = (c_char_p * num_rows)()
+    try:
+        ans = func(c_arr, c_len, result_ptr, c_head, c_tail, c_skip, c_enable_loop)
+    except Exception as e:
+        print(f"Error: {e}")
+    res = []
+    for i in range(ans):
+        print(result_ptr[i].decode('utf-8'))
+        res.append(result_ptr[i].decode('utf-8'))
+    del my_dll_
+    return res
 
 
 class MainWindow(QWidget):
@@ -159,60 +245,11 @@ class MainWindow(QWidget):
         else:
             self.option['r'] = 0
 
-    def error_handler(self, exception_type, exception_value):
-        print(f"Exception: {exception_value}")
-        ctypes.pythonapi.PyErr_SetString(exception_type, str(exception_value).encode("utf-8"))
-
-    def extract_words(self, text):
-        words = []
-        length = len(text)
-        i = 0
-        while i < length:
-            j = i
-            while i < length and text[i].isalpha():
-                i = i + 1
-            if j != i:
-                words.append(text[j:i])
-            i = i + 1
-        for i in range(len(words)):
-            print(words[i])
-        return words, len(words)
-
     def submit_button_click(self):
-        C_FUNC_TYPE = ctypes.CFUNCTYPE(None, ctypes.py_object, ctypes.py_object)
-        c_func = C_FUNC_TYPE(self.error_handler)
-
-        num_rows = 20000
-        num_cols = 200
-        my_dll = ctypes.CDLL("./bin/core.dll")
-        my_dll.gen_chains_all.argtypes = [ctypes.POINTER(ctypes.c_char_p),
-                                          ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
-        my_dll.gen_chains_all.errcheck = c_func
-
+        self.output_text.clear()
         text = self.text_edit.toPlainText()
-
-        words, size = self.extract_words(text)
-        # switch words to c_type
-        c_words = [ctypes.c_char_p(w.encode()) for w in words]
-        # c_arr = (ctypes.c_char_p * len(words))(*c_words)
-        c_arr = ctypes.POINTER(ctypes.c_char_p)(*c_words)
-        print(type(c_arr))
-        c_len = ctypes.c_int(size)
-        result = ctypes.POINTER(ctypes.c_char_p)()
-        # result = (ctypes.c_char_p * num_rows)()
-        # for i in range(num_rows):
-        #     result[i] = ctypes.c_char_p()
-        print(type(result))
-        # print(type(result[0]))
-
-        ans = -1
-        try:
-            ans = my_dll.gen_chains_all(c_arr, size, result)
-        except Exception as e:
-            print(f"Error: {e}")
-        print(ans)
-        for i in range(ans):
-            print(result[i].decode('utf-8'))
+        words, size = extract_words(text)
+        result = gen_chains_all(words, size)
         # print("text: ", text)
         # print("h: ", self.line_input_h.text())
         # self.text_edit.hide()
@@ -222,9 +259,8 @@ class MainWindow(QWidget):
             print('')
         elif self.radio_btn_w.isChecked():
             print('')
-        del my_dll
-        self.output_text.clear()
-        self.output_text.append("contents")
+        for i in range(len(result)):
+            self.output_text.append(result[i])
 
 
 if __name__ == '__main__':

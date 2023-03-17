@@ -15,7 +15,8 @@ class Solver {
 
     int postprocess(vector<string> &results_tmp, char* results[]) {
         if (results_tmp.size() > 20000) {
-            throw logic_error("Too many results.");
+            return -2;
+            //throw logic_error("Too many results.");
         }
         for (int i = 0; i < results_tmp.size(); i++) {
             int len = results_tmp[i].size() + 1;
@@ -27,17 +28,19 @@ class Solver {
 
     int get_all(char* results[]) {
         if (graph->check_circle()) {
-            throw logic_error("There is a circle in the graph.");
+            return -1;
+            //throw logic_error("There is a circle in the graph.");
         }
         int res = graph->get_all(results_tmp);
-        
+
         return postprocess(results_tmp, results);
     }
 
     int get_max_word(char* results[], char head, char tail, char skip, bool loop) {
         if (loop == false) {
             if (graph->check_circle()) {
-                throw logic_error("There is a circle in the graph.");
+                return -1;
+                //throw logic_error("There is a circle in the graph.");
             }
         }
         int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
@@ -48,7 +51,8 @@ class Solver {
     int get_max_char(char* results[], char head, char tail, char skip, bool loop) {
         if (loop == false) {
             if (graph->check_circle()) {
-                throw logic_error("There is a circle in the graph.");
+                return -1;
+                //throw logic_error("There is a circle in the graph.");
             }
         }
         int res = graph->get_max_word(results_tmp, head, tail, skip, loop);
