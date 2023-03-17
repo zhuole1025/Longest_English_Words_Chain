@@ -2,6 +2,7 @@
 #include <cstring>
 #include <stdexcept>
 #include "graph.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -32,7 +33,7 @@ class Solver {
             //throw logic_error("There is a circle in the graph.");
         }
         int res = graph->get_all(results_tmp);
-
+        sort(results_tmp.begin(), results_tmp.end());
         return postprocess(results_tmp, results);
     }
 

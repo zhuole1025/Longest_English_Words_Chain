@@ -79,8 +79,8 @@ namespace maintest
             test_args(argv.size(), argv.data(), 2, '\0', 'j', 'i', true, "test.txt");
             argv = { "Wordlist.exe", "-C", "-r", "-h", "r", "-j", "k", "test" };
             test_args(argv.size(), argv.data(), 3, 'r', '\0', 'k', true, "test.txt");
-            argv = { "Wordlist.exe", "-w", "-t", "a", "-h", "b", "-j", "b", "-r", "test" };
-            test_args(argv.size(), argv.data(), 2, 'b', 'a', 'b', true, "test.txt");
+            argv = { "Wordlist.exe", "-w", "-t", "a", "-h", "b", "-j", "c", "-r", "test" };
+            test_args(argv.size(), argv.data(), 2, 'b', 'a', 'c', true, "test.txt");
 
             // unusual but considered legal:
             argv = { "Wordlist.exe", "-w", "-r", "-r", "test" };
@@ -178,7 +178,7 @@ namespace maintest
 
         TEST_METHOD(test_arg_exc11) {
             vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "a", "-j", "a", "test"};
-            char* info = "the letters of - h and -j shouldn't be the same.";
+            char* info = "the letters of -h and -j shouldn't be the same.";
             test_arg_exception(7, argv.data(), info);
         }
 
