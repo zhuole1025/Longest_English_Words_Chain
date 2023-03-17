@@ -303,7 +303,7 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 5 for error
         TEST_METHOD(gen_chain_word_test5)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knod"};
+            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knee"};
             int len = 13;
             vector<char*> results(500, 0);
             // -w
@@ -506,7 +506,7 @@ namespace unittest
             int len = 3;
             vector<char*> results(500, 0);
 
-            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
+            int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(-1, ans);
             /*try {
                 int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
