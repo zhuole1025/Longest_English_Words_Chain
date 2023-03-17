@@ -1,7 +1,7 @@
 #include "main.h"
 #include "core.h"
-constexpr auto DEBUG = 1;
-constexpr auto INFO = 1;
+constexpr auto DEBUG = 0;
+constexpr auto INFO = 0;
 
 using namespace std;
 
@@ -114,17 +114,20 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
         goto error;
     }
 
-    if (all_chains + max_word + max_char >= 2) {
+    if (all_chains + max_word + max_char == 0) {
+        str = "you should use one of -w, -n, -c"; goto error;
+    }
+    else if (all_chains + max_word + max_char >= 2) {
         str = "option -w, -n, -c should not be used together"; goto error;
     }
-    else if (all_chains + max_word + max_char == 0) {
-        str = "you should use one of -w, -n, -c"; goto error;
+    else if (all_chains == 1 && headc + tailc + forbidden + loopc != 0) {
+        str = "we don't support option -n used with other options."; goto error;
     }
     else if (headc > 1 || tailc > 1 || forbidden > 1) {
         str = "-h, -t, -j should be used no more than twice!"; goto error;
     }
-    else if (all_chains == 1 && headc + tailc + forbidden != 0) {
-
+    else if (headc == 1 && forbidden == 1 && head == jinz) {
+        str = "the letters of -h and -j shouldn't be the same."; goto error;
     }
     
     func_type = all_chains ? 1 : max_word ? 2 : 3;
@@ -177,6 +180,15 @@ vector<const char*> extract_words(ifstream& file) {
         throw runtime_error("There is no word in your input!");
     }
     return wordList;
+}
+
+void free_memory(vector<char*> vecPtr) {
+    vector<char*>::iterator it = vecPtr.begin();
+    for (; it != vecPtr.end(); )
+    {
+        delete[] * it;
+        it = vecPtr.erase(it);
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -311,6 +323,7 @@ int main(int argc, char* argv[]) {
     if (!outfile.empty()) {
         output.close();
     }
+    free_memory(results);
 
     return 0;
 }

@@ -176,6 +176,12 @@ namespace maintest
             test_arg_exception(4, argv.data(), info);
         }
 
+        TEST_METHOD(test_arg_exc11) {
+            vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "a", "-j", "a", "test"};
+            char* info = "the letters of - h and -j shouldn't be the same.";
+            test_arg_exception(7, argv.data(), info);
+        }
+
         TEST_METHOD(test_openfile_exception) {
             try
             {
