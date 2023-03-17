@@ -151,6 +151,7 @@ vector<const char*> extract_words(ifstream& file) {
     string line, word;
 
     while (getline(file, line)) {
+        word.clear();
         for (int i = 0; i < line.length(); ++i) {
             if (is_valid_char(line[i])) {
                 word += (line[i] | 0x20); 
