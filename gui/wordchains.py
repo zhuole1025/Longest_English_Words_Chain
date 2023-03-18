@@ -12,6 +12,9 @@ from ctypes import *
 num_rows = 20005
 num_cols = 200
 
+ppath = "core.dll"
+path = "./bin/core.dll"
+
 
 def extract_words(text):
     words = []
@@ -45,7 +48,7 @@ def process_words(words):
 
 def gen_chains_all(words, len_):
     ans = -1
-    my_dll_ = CDLL("../bin/core.dll")
+    my_dll_ = CDLL(path)
     func = my_dll_.gen_chains_all
     func.argtype = [(c_char_p * num_rows)(), c_int, (c_char_p * num_rows)()]
     func.restype = c_int
@@ -67,7 +70,7 @@ def gen_chains_all(words, len_):
 
 def gen_chain_word_or_char(type_, words, len_, head, tail, skip, enable_loop):
     ans = -1
-    my_dll_ = CDLL("../bin/core.dll")
+    my_dll_ = CDLL(path)
     func = my_dll_.gen_chain_word if type_ == 'w' else my_dll_.gen_chain_char
     # func.restype = c_int
     # func.errcheck = c_func
@@ -300,25 +303,29 @@ class MainWindow(QWidget):
         skip = 0
         if self.radio_btn_n.isChecked() and self.option['h'] + self.option['t'] + self.option['j'] + self.option['r'] > 0:
             self.throw_error_msg("option '-n' should not be used with other options.")
+            return
         if self.option['h'] == 1:
             content = self.line_input_h.text()
             if len(content) != 1:
                 self.throw_error_msg("option '-h' needs a single letter.")
+                return
             else:
-                head = content[0]
+                head = ord(content[0])
                 # print(head, type(head))
         if self.option['t'] == 1:
             content = self.line_input_t.text()
             if len(content) != 1:
                 self.throw_error_msg("option '-t' needs a single letter.")
+                return
             else:
-                tail = content[0]
+                tail = ord(content[0])
         if self.option['j'] == 1:
             content = self.line_input_j.text()
             if len(content) != 1:
                 self.throw_error_msg("option '-j' needs a single letter.")
+                return
             else:
-                skip = content[0]
+                skip = ord(content[0])
         loop = True if self.option['r'] == 1 else False
 
         if self.radio_btn_n.isChecked():
@@ -329,18 +336,19 @@ class MainWindow(QWidget):
             result, sign = gen_chain_word_or_char('c', words, size, head, tail, skip, loop)
         else:
             self.throw_error_msg("you need to choose one of the upper options:ALL, WORD, CHAR.")
+            return
         # print(sign)
         end_time = time.perf_counter()
         if sign == -1:
             self.throw_error_msg("a circle is detected but is not allowed.")
         elif sign == 0:
-            self.throw_error_msg("no chains satisfied your requirements, please modify your input.")
+            self.throw_error_msg("no chains satisfied your requirements, please check your selection.")
         else:
             run_time = end_time - start_time
             self.time_label.setText(f"program running time: {run_time:.6f} seconds.\n")
             self.time_label.show()
             if self.radio_btn_n.isChecked():
-                self.output_text.append("total number of chains: " + sign)
+                self.output_text.append("total number of chains: " + str(sign))
             for i in range(len(result)):
                 self.output_text.append(result[i])
             self.output_text.show()
