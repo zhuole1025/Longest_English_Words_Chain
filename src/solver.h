@@ -16,7 +16,7 @@ class Solver {
 
     int postprocess(vector<string> &results_tmp, char* results[]) {
         if (results_tmp.size() > 20000) {
-            return results_tmp.size();
+            return (int)results_tmp.size();
             //throw logic_error("Too many results.");
         }
         for (int i = 0; i < results_tmp.size(); i++) {
