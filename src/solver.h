@@ -20,11 +20,11 @@ class Solver {
             //throw logic_error("Too many results.");
         }
         for (int i = 0; i < results_tmp.size(); i++) {
-            int len = results_tmp[i].size() + 1;
+            size_t len = results_tmp[i].size() + 1;
             results[i] = new char[len];
             strcpy_s(results[i], len, results_tmp[i].c_str());
         }
-        return results_tmp.size();
+        return (int)results_tmp.size();
     }
 
     int get_all(char* results[]) {

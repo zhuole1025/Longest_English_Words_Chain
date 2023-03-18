@@ -11,9 +11,3 @@ int gen_chain_word(const char* words[], int len, char* result[], char head, char
 CORE_EXPOSE
 int gen_chain_char(const char* words[], int len, char* result[], char head, char tail, char skip, bool enable_loop);
 
-CORE_EXPOSE
-int gen_chains_all_gui(const char** words, int len, char** result);
-CORE_EXPOSE
-int gen_chain_word_gui(const char** words, int len, char** result, char head, char tail, char skip, bool enable_loop);
-CORE_EXPOSE
-int gen_chain_char_gui(const char** words, int len, char** result, char head, char tail, char skip, bool enable_loop);
