@@ -288,7 +288,7 @@ int main(int argc, char* argv[]) {
     if (func_ret == -1) {
         cerr << "Error: There is a circle in the graph." << '\n';
     }
-    else if (func_ret == -2) {
+    else if (func_ret > 20000) {
         cerr << "Error: Too many results." << '\n';
     }
     

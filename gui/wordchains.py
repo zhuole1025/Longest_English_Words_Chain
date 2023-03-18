@@ -13,8 +13,8 @@ num_rows = 20005
 num_cols = 200
 
 ppath = "core.dll"
-path = "./bin/core.dll"
-
+# path = "./bin/core.dll"
+path = ppath
 
 def extract_words(text):
     words = []
@@ -341,6 +341,8 @@ class MainWindow(QWidget):
         end_time = time.perf_counter()
         if sign == -1:
             self.throw_error_msg("a circle is detected but is not allowed.")
+        elif sign > 20000:
+            self.throw_error_msg("too many results!")
         elif sign == 0:
             self.throw_error_msg("no chains satisfied your requirements, please check your selection.")
         else:
