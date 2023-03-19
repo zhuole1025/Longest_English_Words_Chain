@@ -105,7 +105,7 @@ int deal_with_arg(int argc, char* argv[], int& func_type, char& head, char& tail
             }
 
             filename = argv[i];
-            filename += ".txt";
+            //filename += ".txt";
         }
         ++i;
     }
