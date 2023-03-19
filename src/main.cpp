@@ -296,7 +296,7 @@ int main(int argc, char* argv[]) {
 
 
     ofstream output;
-    string outfile = func_type == 1 ? "" : "solution.txt";
+    string outfile = "solution.txt";
     ostream& out = outfile.empty() ? cout : output; // use quote?
 
     if (INFO)   cout << "start to output" << "\nret_val = " << func_ret << ", outfile is empty ? " << outfile.empty() << '\n';
