@@ -7,15 +7,14 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
-bool cmp(const char* a, const char* b) {
-    return strcmp(a, b) < 0;
-}
+
+
 namespace unittest
 {
     TEST_CLASS(unittest)
     {
     public:
-       
+
 
         // unit test for get_all function in graph.h case 1
         TEST_METHOD(gen_chains_all_test1)
@@ -102,13 +101,13 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 1
         TEST_METHOD(gen_chain_word_test1)
         {
-            const char* words[] = {"ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm", "ff", "bb", "uv"};
+            const char* words[] = { "ab", "bc", "cd", "de", "ef", "fg", "gh", "hi", "ij", "jk", "kl", "lm", "ff", "bb", "uv" };
             int len = 15;
             vector<char*> results(500, 0);
-            
+
             // -w
             int expected_ans = 14;
-            vector<string> expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
+            vector<string> expected_words = { "ab", "bb", "bc", "cd", "de", "ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm" };
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -121,7 +120,7 @@ namespace unittest
 
             // -w -h e
             expected_ans = 9;
-            expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm"};
+            expected_words = { "ef", "ff", "fg", "gh", "hi", "ij", "jk", "kl", "lm" };
             ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -133,9 +132,9 @@ namespace unittest
             }
 
             // -w -t g
-            
+
             expected_ans = 8;
-            expected_words = {"ab", "bb", "bc", "cd", "de", "ef", "ff", "fg"};
+            expected_words = { "ab", "bb", "bc", "cd", "de", "ef", "ff", "fg" };
             ans = gen_chain_word(words, len, results.data(), 0, 'g', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -147,9 +146,9 @@ namespace unittest
             }
 
             // -w -h e -t k
-            
+
             expected_ans = 7;
-            expected_words = {"ef", "ff", "fg", "gh", "hi", "ij", "jk"};
+            expected_words = { "ef", "ff", "fg", "gh", "hi", "ij", "jk" };
             ans = gen_chain_word(words, len, results.data(), 'e', 'k', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -161,7 +160,7 @@ namespace unittest
             }
 
             // -w -h b -t v
-            
+
             expected_ans = 0;
             ans = gen_chain_word(words, len, results.data(), 'b', 'v', 0, false);
             Assert::AreEqual(ans, expected_ans);
@@ -170,13 +169,13 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 2
         TEST_METHOD(gen_chain_word_test2)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism" };
             int len = 13;
             vector<char*> results(500, 0);
-            
+
             // -w
             int expected_ans = 4;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick"};
+            vector<string> expected_words = { "algebra", "apple", "elephant", "trick" };
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -188,9 +187,9 @@ namespace unittest
             }
 
             // -w -h p
-            
+
             expected_ans = 3;
-            expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            expected_words = { "pseudopseudohypoparathyroidism", "medium", "moon" };
             ans = gen_chain_word(words, len, results.data(), 'p', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -202,9 +201,9 @@ namespace unittest
             }
 
             // -w -t m
-            
+
             expected_ans = 2;
-            expected_words = {"pseudopseudohypoparathyroidism", "medium"};
+            expected_words = { "pseudopseudohypoparathyroidism", "medium" };
             ans = gen_chain_word(words, len, results.data(), 0, 'm', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -219,13 +218,13 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 3
         TEST_METHOD(gen_chain_word_test3)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "egg", "trick", "knee"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "egg", "trick", "knee" };
             int len = 13;
             vector<char*> results(500, 0);
-            
+
             // -w -r
             int expected_ans = 6;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick", "knee", "egg"};
+            vector<string> expected_words = { "algebra", "apple", "elephant", "trick", "knee", "egg" };
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -237,9 +236,9 @@ namespace unittest
             }
 
             // -w -h e -r
-            
+
             expected_ans = 4;
-            expected_words = {"elephant", "trick", "knee", "egg"};
+            expected_words = { "elephant", "trick", "knee", "egg" };
             ans = gen_chain_word(words, len, results.data(), 'e', 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -251,9 +250,9 @@ namespace unittest
             }
 
             // -w -t e -r
-            
+
             expected_ans = 5;
-            expected_words = {"algebra", "apple", "elephant", "trick", "knee"};
+            expected_words = { "algebra", "apple", "elephant", "trick", "knee" };
             ans = gen_chain_word(words, len, results.data(), 0, 'e', 0, true);
             pred_words.clear();
             for (int i = 0; i < ans; i++) {
@@ -268,13 +267,13 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 4
         TEST_METHOD(gen_chain_word_test4)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism" };
             int len = 13;
             vector<char*> results(500, 0);
-            
+
             // -w -j a
             int expected_ans = 3;
-            vector<string> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            vector<string> expected_words = { "pseudopseudohypoparathyroidism", "medium", "moon" };
             int ans = gen_chain_word(words, len, results.data(), 0, 0, 'a', false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -286,9 +285,9 @@ namespace unittest
             }
 
             // -w -t n -j a
-            
+
             expected_ans = 3;
-            expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            expected_words = { "pseudopseudohypoparathyroidism", "medium", "moon" };
             ans = gen_chain_word(words, len, results.data(), 0, 'n', 'a', false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -303,7 +302,7 @@ namespace unittest
         // unit test for gen_chain_word function in core.h case 5 for error
         TEST_METHOD(gen_chain_word_test5)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knee"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "knee" };
             int len = 13;
             vector<char*> results(500, 0);
             // -w
@@ -339,13 +338,13 @@ namespace unittest
         // unit test for gen_chain_char function in core.h case 1
         TEST_METHOD(gen_chain_char_test1)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism" };
             int len = 13;
             vector<char*> results(500, 0);
-            
+
             // -c
             int expected_ans = 3;
-            vector<string> expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            vector<string> expected_words = { "pseudopseudohypoparathyroidism", "medium", "moon" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -357,9 +356,9 @@ namespace unittest
             }
 
             // -c -h p
-            
+
             expected_ans = 3;
-            expected_words = {"pseudopseudohypoparathyroidism", "medium", "moon"};
+            expected_words = { "pseudopseudohypoparathyroidism", "medium", "moon" };
             ans = gen_chain_char(words, len, results.data(), 'p', 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -371,9 +370,9 @@ namespace unittest
             }
 
             // -c -t m
-            
+
             expected_ans = 2;
-            expected_words = {"pseudopseudohypoparathyroidism", "medium"};
+            expected_words = { "pseudopseudohypoparathyroidism", "medium" };
             ans = gen_chain_char(words, len, results.data(), 0, 'm', 0, false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -388,12 +387,12 @@ namespace unittest
         // unit test for gen_chain_char function in core.h case 2
         TEST_METHOD(gen_chain_char_test2)
         {
-            const char* words[] = {"aaaaaaaaaaaaaaab", "cd", "de", "ef"};
+            const char* words[] = { "aaaaaaaaaaaaaaab", "cd", "de", "ef" };
             int len = 4;
             vector<char*> results(500, 0);
-            
+
             int expected_ans = 3;
-            vector<string> expected_words = {"cd", "de", "ef"};
+            vector<string> expected_words = { "cd", "de", "ef" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -407,12 +406,12 @@ namespace unittest
 
         // unit test for gen_chain_char function in core.h case 3
         TEST_METHOD(gen_chain_char_test3) {
-            const char* words[] = {"abc", "cba", "aaaaaaaaa"};
+            const char* words[] = { "abc", "cba", "aaaaaaaaa" };
             int len = 3;
             vector<char*> results(500, 0);
-            
+
             int expected_ans = 3;
-            vector<string> expected_words = {"abc", "cba", "aaaaaaaaa"};
+            vector<string> expected_words = { "abc", "cba", "aaaaaaaaa" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, true);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -429,12 +428,12 @@ namespace unittest
 
         // unit test for gen_chain_char function in core.h case 4
         TEST_METHOD(gen_chain_char_test4) {
-            const char* words[] = {"ab", "bc", "aaaaaaaa"};
+            const char* words[] = { "ab", "bc", "aaaaaaaa" };
             int len = 3;
             vector<char*> results(500, 0);
-            
+
             int expected_ans = 3;
-            vector<string> expected_words = {"aaaaaaaa", "ab", "bc"};
+            vector<string> expected_words = { "aaaaaaaa", "ab", "bc" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -448,12 +447,12 @@ namespace unittest
 
         // unit test for gen_chain_char function in core.h case 5
         TEST_METHOD(gen_chain_char_test5) {
-            const char* words[] = {"zzzzzz", "yz", "xy"};
+            const char* words[] = { "zzzzzz", "yz", "xy" };
             int len = 3;
             vector<char*> results(500, 0);
-            
+
             int expected_ans = 3;
-            vector<string> expected_words = {"xy", "yz", "zzzzzz"};
+            vector<string> expected_words = { "xy", "yz", "zzzzzz" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 0, false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -468,13 +467,13 @@ namespace unittest
         // unit test for gen_chain_char function in core.h case 6
         TEST_METHOD(gen_chain_char_test6)
         {
-            const char* words[] = {"algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism"};
+            const char* words[] = { "algebra", "apple", "zoo", "elephant", "under", "fox", "panz", "medium", "dog", "moon", "leaf", "trick", "pseudopseudohypoparathyroidism" };
             int len = 13;
             vector<char*> results(500, 0);
-            
+
             // -c -j p
             int expected_ans = 4;
-            vector<string> expected_words = {"algebra", "apple", "elephant", "trick"};
+            vector<string> expected_words = { "algebra", "apple", "elephant", "trick" };
             int ans = gen_chain_char(words, len, results.data(), 0, 0, 'p', false);
             Assert::AreEqual(ans, expected_ans);
             vector<string> pred_words;
@@ -486,9 +485,9 @@ namespace unittest
             }
 
             // -w -t t -j p
-            
+
             expected_ans = 3;
-            expected_words = {"algebra", "apple", "elephant"};
+            expected_words = { "algebra", "apple", "elephant" };
             ans = gen_chain_char(words, len, results.data(), 0, 't', 'p', false);
             Assert::AreEqual(ans, expected_ans);
             pred_words.clear();
@@ -502,7 +501,7 @@ namespace unittest
 
         // unit test for gen_chain_char function in core.h case 7 for error
         TEST_METHOD(gen_chain_char_test7) {
-            const char* words[] = {"abc", "cba", "aaaaaaaaa"};
+            const char* words[] = { "abc", "cba", "aaaaaaaaa" };
             int len = 3;
             vector<char*> results(500, 0);
 
@@ -518,4 +517,3 @@ namespace unittest
     };
 
 }
-

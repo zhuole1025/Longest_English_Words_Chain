@@ -1,7 +1,3 @@
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <iostream>
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../src/main.h"
@@ -42,14 +38,14 @@ namespace maintest
             Assert::AreEqual(expected_filename, filename);
         }
 
-        void test_arg_exception(int argc, char* argv[], const char * expected_info) {
+        void test_arg_exception(int argc, char* argv[], const char* expected_info) {
             try
             {
                 test_args(argc, argv, 0, 0, 0, 0, false, "");
             }
             catch (const std::exception& e)
             {
-                Assert::AreEqual(0,strcmp(expected_info, e.what()));
+                Assert::AreEqual(0, strcmp(expected_info, e.what()));
             }
             Assert::Fail;
         }
@@ -101,7 +97,7 @@ namespace maintest
         }
 
         TEST_METHOD(test_arg_exc2) {
-            vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "test"};
+            vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "test" };
             char* info = "Usage -h needs a letter following";
             test_arg_exception(4, argv.data(), info);
 
@@ -121,7 +117,7 @@ namespace maintest
         }
 
         TEST_METHOD(test_arg_exc4) {
-            vector<char*> argv = { "Wordlist.exe" , "-w", "test", "-r","test"};
+            vector<char*> argv = { "Wordlist.exe" , "-w", "test", "-r","test" };
             char* info = "process one file at a time!";
             test_arg_exception(5, argv.data(), info);
 
@@ -134,7 +130,7 @@ namespace maintest
             char* info = "we don't support option -n used with other options.";
             test_arg_exception(4, argv.data(), info);
 
-            argv = { "Wordlist.exe", "-n", "-w", "test"};
+            argv = { "Wordlist.exe", "-n", "-w", "test" };
             test_arg_exception(4, argv.data(), info);
         }
 
@@ -145,13 +141,13 @@ namespace maintest
         }
 
         TEST_METHOD(test_arg_exc7) {
-            vector<char*> argv = { "Wordlist.exe" , "-r", "-j", "a", "test"};
+            vector<char*> argv = { "Wordlist.exe" , "-r", "-j", "a", "test" };
             char* info = "you should use one of -w, -n, -c";
             test_arg_exception(5, argv.data(), info);
         }
 
         TEST_METHOD(test_arg_exc8) {
-            vector<char*> argv = { "Wordlist.exe" , "-w", "-J", "m", "-j", "m", "test"};
+            vector<char*> argv = { "Wordlist.exe" , "-w", "-J", "m", "-j", "m", "test" };
             char* info = "-h, -t, -j should be used no more than twice!";
             test_arg_exception(7, argv.data(), info);
 
@@ -177,7 +173,7 @@ namespace maintest
         }
 
         TEST_METHOD(test_arg_exc11) {
-            vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "a", "-j", "a", "test"};
+            vector<char*> argv = { "Wordlist.exe" , "-w", "-h", "a", "-j", "a", "test" };
             char* info = "the letters of -h and -j shouldn't be the same.";
             test_arg_exception(7, argv.data(), info);
         }
@@ -192,11 +188,11 @@ namespace maintest
                 Assert::AreEqual(0, strcmp("File<tests.txt> does not exist!", e.what()));
                 return;
             }
-            Assert::Fail;
+            Assert::Fail();
         }
 
         TEST_METHOD(test_openfile_exception2) {
-            ofstream file_open("../test.txt");
+            ofstream file_open("../test.txt", ios::out);
             try
             {
                 open_file("../test.txt");
@@ -207,7 +203,7 @@ namespace maintest
                 return;
             }
             file_open.close();
-            Assert::Fail;
+            Assert::Fail();
         }
 
     };

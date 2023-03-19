@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
-    <ProjectGuid>{9695AEB1-287B-4FA6-9427-04F9ACDB3575}</ProjectGuid>
+    <ProjectGuid>{D035F55B-0BD3-424A-83E6-605C4B56C0ED}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -138,7 +138,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -157,7 +157,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -165,7 +164,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test.cpp" />
-    <ClCompile Include="test_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core.h" />

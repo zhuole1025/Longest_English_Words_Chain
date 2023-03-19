@@ -2,7 +2,6 @@
 #include <stack>
 #include <string>
 #include <unordered_set>
-#include <omp.h>
 #include "word.h"
 
 using namespace std;
@@ -167,7 +166,6 @@ class Graph {
             }
         }
         if (loop) {
-            #pragma omp parallel for schedule(dynamic)
             for (int i: task) 
             {
                 for (Word &u: v[i]) {
@@ -175,7 +173,6 @@ class Graph {
                     vector<string> res;
                     int num = dfs_max_loop(u, tail, vis, res);
                     if (ans < num && res.size() > 1) 
-                    #pragma omp critical
                     {
                         ans = num;
                         results = res;
