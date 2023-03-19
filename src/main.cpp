@@ -149,8 +149,8 @@ ifstream open_file(const string& filename) {
     return file;
 }
 
-vector<const char*> extract_words(ifstream& file) {
-    vector<const char*> wordList;
+vector<char*> extract_words(ifstream& file) {
+    vector<char*> wordList;
     string line, word;
 
     while (getline(file, line)) {
@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
     if (INFO) cout << "-------- file opened.\t extract words----" << '\n';
 
     // extract legal words into wordList
-    vector<const char*> wordList;
+    vector<char*> wordList;
     try
     {
         wordList = extract_words(file);

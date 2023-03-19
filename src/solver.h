@@ -10,7 +10,7 @@ class Solver {
     Graph *graph;
     vector<string> results_tmp;
     public:
-    Solver(const char* words[], int len, bool weight) {
+    Solver(char* words[], int len, bool weight) {
         graph = new Graph(words, len, weight);
     }
 

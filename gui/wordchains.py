@@ -45,7 +45,7 @@ def process_words(words):
 
 def gen_chains_all(words, len_):
     ans = -1
-    my_dll_ = CDLL("../bin/core.dll")
+    my_dll_ = CDLL("core.dll")
     func = my_dll_.gen_chains_all
     func.argtype = [(c_char_p * num_rows)(), c_int, (c_char_p * num_rows)()]
     func.restype = c_int
@@ -67,7 +67,7 @@ def gen_chains_all(words, len_):
 
 def gen_chain_word_or_char(type_, words, len_, head, tail, skip, enable_loop):
     ans = -1
-    my_dll_ = CDLL("../bin/core.dll")
+    my_dll_ = CDLL("core.dll")
     func = my_dll_.gen_chain_word if type_ == 'w' else my_dll_.gen_chain_char
     # func.restype = c_int
     # func.errcheck = c_func
@@ -253,7 +253,7 @@ class MainWindow(QWidget):
             self.option['j'] = 1
             self.line_input_j.show()
         else:
-            self.option['t'] = 0
+            self.option['j'] = 0
             self.line_input_j.hide()
 
     def on_radio_btn_r_changed(self, state):
@@ -340,7 +340,7 @@ class MainWindow(QWidget):
             self.time_label.setText(f"program running time: {run_time:.6f} seconds.\n")
             self.time_label.show()
             if self.radio_btn_n.isChecked():
-                self.output_text.append("total number of chains: " + sign)
+                self.output_text.append("total number of chains: " + str(sign))
             for i in range(len(result)):
                 self.output_text.append(result[i])
             self.output_text.show()

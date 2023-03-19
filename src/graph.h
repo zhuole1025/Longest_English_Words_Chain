@@ -18,7 +18,7 @@ class Graph {
     int index, sum, num, max;
     stack<int> stk;
     public:
-    Graph(const char* words[], int len, bool weight) {
+    Graph(char* words[], int len, bool weight) {
         for (int i = 0; i < NUM_POINT; i++) {
             v.push_back(vector<Word>());
         }
