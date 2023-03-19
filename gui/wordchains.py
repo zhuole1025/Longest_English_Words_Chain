@@ -256,7 +256,7 @@ class MainWindow(QWidget):
             self.option['j'] = 1
             self.line_input_j.show()
         else:
-            self.option['t'] = 0
+            self.option['j'] = 0
             self.line_input_j.hide()
 
     def on_radio_btn_r_changed(self, state):
