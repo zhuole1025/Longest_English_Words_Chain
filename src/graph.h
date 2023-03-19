@@ -12,10 +12,7 @@ using namespace std;
 class Graph {
     vector<vector<Word> > v;
     vector<string> bak;
-    // bool vis[MAX_POINT], vis_tmp[MAX_POINT], has_cicle;
-    // int dfn[MAX_POINT], low[MAX_POINT], color[MAX_POINT];
-    int index, sum, num, max;
-    stack<int> stk;
+    int num, max;
     public:
     Graph(const char* words[], int len, bool weight) {
         for (int i = 0; i < NUM_POINT; i++) {
@@ -30,59 +27,8 @@ class Graph {
         }
         this->num = (int)bak.size();
     }
-        // for (int i = 0; i < MAX_POINT; i++) {
-        //     v[i].clear();
-        //     vis[i] = false;
-        // }
-        // for (int i = 0; i < num; i++) {
-        //     string tmp = bak[i];
-        //     if (tmp.size() > 1) {
-        //         v[tmp[0] - 'a'].push_back(Word(tmp));
-        //     }
-        // }
-        // index = sum = 0;
-        // for (int i = 0; i < NUM_POINT; i++) {
-        //     if (!vis[i]) {
-        //         tarjan(i);
-        //     }
-        // }
-    // }
-
-    // void tarjan(int u) {
-    //     dfn[u] = low[u] = ++index;
-    //     stk.push(u);
-    //     vis[u] = vis_tmp[u] = true;
-    //     for(int w: v[u])
-    //     {
-    //         int target = bak[w].back() - 'a';
-    //         if(!dfn[to])
-    //         {
-    //             tarjan(w);
-    //             low[u] = min(low[u], low[to]);
-    //         }
-    //         else if(vis_tmp[to]) {
-    //             low[u] = min(low[u], low[to]);
-    //         }
-    //     }
-    //     if(dfn[u] == low[u]) {
-    //         color[u] = ++sum;
-    //         vis_tmp[u] = false;
-    //         while (stk.top() != u) {
-    //             color[stk.top()] = color[u];
-    //             vis_tmp[stk.top()] = false;
-    //             stk.pop();
-    //         }
-    //     } 
-    // }
 
     void update_graph(char skip) {
-        // for (int i = 0; i < num; i ++) {
-        //     if (bak[i][0] == skip) {
-        //         bak.erase(bak.begin() + i);
-
-        //     }
-        // }
-        // this->num = bak.size();
         v[skip].clear();
     }
 
